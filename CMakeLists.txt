@@ -5,7 +5,7 @@ CMAKE_MINIMUM_REQUIRED(VERSION 3.15 FATAL_ERROR)
 ########################################################
 
 # project name
-PROJECT( TrackPerf )
+PROJECT( ClusterShapeAnalysis )
 
 # project version
 SET( ${PROJECT_NAME}_VERSION_MAJOR 0 )
@@ -49,34 +49,30 @@ ENDIF()
 ### LIBRARY #################################################################
 
 # Main library with Processors
-ADD_LIBRARY(TrackPerf SHARED
-  ./src/TrackPerfHistProc.cxx
-  ./src/TrackHists.cxx
-  ./src/TruthHists.cxx
-  ./src/FilterTracks.cxx
-  ./src/ResoHists.cxx
-  )
-TARGET_INCLUDE_DIRECTORIES(TrackPerf
+ADD_LIBRARY(ClusterShapeAnalysis SHARED
+  ./src/ClusterHists.h
+)
+
+TARGET_INCLUDE_DIRECTORIES(ClusterShapeAnalysis
   PUBLIC
   ${CMAKE_CURRENT_SOURCE_DIR}
   PRIVATE
   ${Marlin_INCLUDE_DIRS}
   ${RAIDA_INCLUDE_DIRS}
   ${ROOT_INCLUDE_DIRS})
-TARGET_LINK_LIBRARIES(TrackPerf
+TARGET_LINK_LIBRARIES(ClusterShapeAnalysis
   PRIVATE
   ${RAIDA_LIBRARIES}
   ROOT::Hist
   ${ROOT_LIBRARIES} 
   DD4hep::DDCore
   )
-TARGET_COMPILE_DEFINITIONS(TrackPerf
+TARGET_COMPILE_DEFINITIONS(ClusterShapeAnalysis
   PRIVATE
   ${RAIDA_DEFINITIONS})
 
 IF(WITH_PARQUET)
   TARGET_SOURCES(TrackPerf PRIVATE
-    ./src/TrackPerfParquet.cxx
-    ./src/TrackPerfFile.cxx)
-  TARGET_LINK_LIBRARIES(TrackPerf PRIVATE LCParquet)
+    ./src/ClusterHists.cc)
+  TARGET_LINK_LIBRARIES(ClusterShapeAnalysis PRIVATE LCParquet)
 ENDIF()
