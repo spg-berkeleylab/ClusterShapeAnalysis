@@ -50,7 +50,8 @@ ENDIF()
 
 # Main library with Processors
 ADD_LIBRARY(ClusterShapeAnalysis SHARED
-  ./src/ClusterHists.h
+   ./src/ClusterShapeHistProc.cc
+   ./src/ClusterHists.cc
 )
 
 TARGET_INCLUDE_DIRECTORIES(ClusterShapeAnalysis
@@ -73,6 +74,7 @@ TARGET_COMPILE_DEFINITIONS(ClusterShapeAnalysis
 
 IF(WITH_PARQUET)
   TARGET_SOURCES(TrackPerf PRIVATE
-    ./src/ClusterHists.cc)
+    ./src/ClusterHists.cc
+    ./src/ClusterShapeHistProc.cc)
   TARGET_LINK_LIBRARIES(ClusterShapeAnalysis PRIVATE LCParquet)
 ENDIF()

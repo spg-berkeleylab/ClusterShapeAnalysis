@@ -1,13 +1,12 @@
-#include "TrackPerf/ClusterHists.hxx"
+#include "ClusterShapeAnalysis/ClusterHists.h"
 #include "marlin/VerbosityLevels.h"
 
 #include <EVENT/TrackerHit.h>
 #include <EVENT/SimTrackerHit.h>
+#include <UTIL/CellIDDecoder.h>
 #include <IMPL/TrackerHitPlaneImpl.h>
 #include <UTIL/LCTrackerConf.h>
 
-
-using namespace TrackPerf;
 
 ClusterHists::ClusterHists()
 {
