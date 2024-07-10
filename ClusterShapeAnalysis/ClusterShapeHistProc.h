@@ -5,6 +5,7 @@
 #include <TH1.h>
 
 class ClusterHists;
+class TrackerHitResoHists;
 
 //! Creates a simple column wise ntuple in a HistProc from LCIO collections.
 class ClusterShapeHistProc : public marlin::Processor
@@ -62,6 +63,12 @@ private:
   std::shared_ptr<ClusterHists> _clusters_ie;
   std::shared_ptr<ClusterHists> _clusters_ob;
   std::shared_ptr<ClusterHists> _clusters_oe;
+  std::shared_ptr<TrackerHitResoHists> _resolution_vb;
+  std::shared_ptr<TrackerHitResoHists> _resolution_ve;
+  std::shared_ptr<TrackerHitResoHists> _resolution_ib;
+  std::shared_ptr<TrackerHitResoHists> _resolution_ie;
+  std::shared_ptr<TrackerHitResoHists> _resolution_ob;
+  std::shared_ptr<TrackerHitResoHists> _resolution_oe;
 
   TH1 * h_trackerhit_timing;  
  

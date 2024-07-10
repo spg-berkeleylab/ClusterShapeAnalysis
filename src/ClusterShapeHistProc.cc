@@ -1,6 +1,7 @@
 #include "ClusterShapeAnalysis/ClusterShapeHistProc.h"
 
 #include "ClusterShapeAnalysis/ClusterHists.h"
+#include "ClusterShapeAnalysis/TrackerHitResoHists.h"
 
 #include <set>
 
@@ -9,6 +10,10 @@
 #include <EVENT/LCRelation.h>
 #include <EVENT/MCParticle.h>
 #include <EVENT/Track.h>
+#include <EVENT/TrackerHit.h>
+#include <EVENT/SimTrackerHit.h>
+#include <EVENT/TrackerHitPlane.h>
+#include <IMPL/TrackerHitPlaneImpl.h>
 
 #include <marlin/AIDAProcessor.h>
 
@@ -129,32 +134,32 @@ void ClusterShapeHistProc::init()
 
   // Create ROOT histograms, with location setup by the above factory
   tree->mkdir("clusters_vb" ); tree->cd("clusters_vb" );
-  //_uncertainties_vb=std::make_shared<TrackerHitResoHists>();
+  _resolution_vb=std::make_shared<TrackerHitResoHists>();
   _clusters_vb=std::make_shared<ClusterHists>();
 
   tree->cd("../");
   tree->mkdir("clusters_ve" ); tree->cd("clusters_ve" );
-  //_uncertainties_ve=std::make_shared<TrackerHitResoHists>();
+  _resolution_ve=std::make_shared<TrackerHitResoHists>();
   _clusters_ve=std::make_shared<ClusterHists>();
 
   tree->cd("../");
   tree->mkdir("clusters_ib" ); tree->cd("clusters_ib" );
-  //_uncertainties_ib=std::make_shared<TrackerHitResoHists>();
+  _resolution_ib=std::make_shared<TrackerHitResoHists>();
   _clusters_ib=std::make_shared<ClusterHists>();
 
   tree->cd("../");
   tree->mkdir("clusters_ie" ); tree->cd("clusters_ie" );
-  //_uncertainties_ie=std::make_shared<TrackerHitResoHists>();
+  _resolution_ie=std::make_shared<TrackerHitResoHists>();
   _clusters_ie=std::make_shared<ClusterHists>();
 
   tree->cd("../");
   tree->mkdir("clusters_ob" ); tree->cd("clusters_ob" );
-  //_uncertainties_ob=std::make_shared<TrackerHitResoHists>();
+  _resolution_ob=std::make_shared<TrackerHitResoHists>();
   _clusters_ob=std::make_shared<ClusterHists>();
 
   tree->cd("../");
   tree->mkdir("clusters_oe" ); tree->cd("clusters_oe" );
-  //_uncertainties_oe=std::make_shared<TrackerHitResoHists>();
+  _resolution_oe=std::make_shared<TrackerHitResoHists>();
   _clusters_oe=std::make_shared<ClusterHists>();
 
 }
@@ -201,7 +206,7 @@ void ClusterShapeHistProc::processEvent( LCEvent * evt )
       _clusters_vb->fill(trkhit);}
 
 
-// vertex endcap tracker hits
+  // vertex endcap tracker hits
   streamlog_out(DEBUG3) << "Num Events in VE Hit Collection: " << vetrkhitCol->getNumberOfElements() << std::endl;
   for(int i=0; i<vetrkhitCol->getNumberOfElements(); ++i)
     {
@@ -244,7 +249,6 @@ void ClusterShapeHistProc::processEvent( LCEvent * evt )
     }
 
    
-  /*  
   // --- tracker hit resolution histograms
 
   // vertex barrel resolution
@@ -262,10 +266,10 @@ void ClusterShapeHistProc::processEvent( LCEvent * evt )
         std::cout << "- Trackhitplane: " << trkhitplane << std::endl;
         continue;
       }
-      _uncertainties_vb->fill(trkhit,simtrkhit,trkhitplane);
+      _resolution_vb->fill(trkhit,simtrkhit,trkhitplane);
     }
 
-  // get resolution histograms for vxe hits
+  // vertex endcap resolution
   for(int i=0; i<VERelationCollection->getNumberOfElements(); ++i)
     {
       streamlog_out(DEBUG3) << "Events in VE Relation Collection: " << VERelationCollection->getNumberOfElements() << std::endl;
@@ -280,10 +284,10 @@ void ClusterShapeHistProc::processEvent( LCEvent * evt )
         std::cout << "- Trackhitplane: " << trkhitplane << std::endl;
         continue;
       }
-      _uncertainties_ve->fill(trkhit,simtrkhit,trkhitplane);
+      _resolution_ve->fill(trkhit,simtrkhit,trkhitplane);
     }
 
-  // resolution hists for itb hits
+  // inner tracker barrel hits resolution
   for(int i=0; i<IBRelationCollection->getNumberOfElements(); ++i)
     {
       streamlog_out(DEBUG3) << "Events in IB Relation Collection: " << IBRelationCollection->getNumberOfElements() << std::endl;
@@ -298,10 +302,11 @@ void ClusterShapeHistProc::processEvent( LCEvent * evt )
         std::cout << "- Trackhitplane: " << trkhitplane << std::endl;
         continue;
       }
-      //_uncertainties_ib->fill(trkhit,simtrkhit,trkhitplane);
+      _resolution_ib->fill(trkhit,simtrkhit,trkhitplane);
     }
+  
 
-  // resolution hists for outer tracker hits
+  // outer tracker barrel hits resolution
   for(int i=0; i<OBRelationCollection->getNumberOfElements(); ++i)
     {
       streamlog_out(DEBUG3) << "Events in OB Relation Collection: " << OBRelationCollection->getNumberOfElements() << std::endl;
@@ -316,10 +321,47 @@ void ClusterShapeHistProc::processEvent( LCEvent * evt )
         std::cout << "- Trackhitplane: " << trkhitplane << std::endl;
         continue;
       }
-      //_uncertainties_ob->fill(trkhit,simtrkhit,trkhitplane);
+      _resolution_ob->fill(trkhit,simtrkhit,trkhitplane);
     }
-  */
-  
+
+
+  // inner tracker endcap hits resolution
+  for(int i=0; i<IERelationCollection->getNumberOfElements(); ++i)
+    {
+      streamlog_out(DEBUG3) << "Events in IE Relation Collection: " << IERelationCollection->getNumberOfElements() << std::endl;
+      EVENT::LCRelation *rel=static_cast<EVENT::LCRelation*>(IERelationCollection->getElementAt(i));
+      EVENT::TrackerHit *trkhit=dynamic_cast<EVENT::TrackerHit*>(rel->getFrom());
+      EVENT::SimTrackerHit *simtrkhit=dynamic_cast<EVENT::SimTrackerHit*>(rel->getTo());
+      IMPL::TrackerHitPlaneImpl *trkhitplane=dynamic_cast<IMPL::TrackerHitPlaneImpl*>(trkhit);
+      if(trkhit==nullptr or simtrkhit==nullptr or trkhitplane==nullptr){
+        std::cout << "Warning: Failed to dynamic cast to planar sensor" << std::endl;
+        std::cout << "- Trackhit: " << trkhit << std::endl;
+        std::cout << "- Simtrackhit: " << simtrkhit << std::endl;
+        std::cout << "- Trackhitplane: " << trkhitplane << std::endl;
+        continue;
+      }
+      _resolution_ie->fill(trkhit,simtrkhit,trkhitplane);
+    }
+
+
+  // outer tracker endcap hits resolution
+  for(int i=0; i<OERelationCollection->getNumberOfElements(); ++i)
+    {
+      streamlog_out(DEBUG3) << "Events in OE Relation Collection: " << OERelationCollection->getNumberOfElements() << std::endl;
+      EVENT::LCRelation *rel=static_cast<EVENT::LCRelation*>(OERelationCollection->getElementAt(i));
+      EVENT::TrackerHit *trkhit=dynamic_cast<EVENT::TrackerHit*>(rel->getFrom());
+      EVENT::SimTrackerHit *simtrkhit=dynamic_cast<EVENT::SimTrackerHit*>(rel->getTo());
+      IMPL::TrackerHitPlaneImpl *trkhitplane=dynamic_cast<IMPL::TrackerHitPlaneImpl*>(trkhit);
+      if(trkhit==nullptr or simtrkhit==nullptr or trkhitplane==nullptr){
+        std::cout << "Warning: Failed to dynamic cast to planar sensor" << std::endl;
+        std::cout << "- Trackhit: " << trkhit << std::endl;
+        std::cout << "- Simtrackhit: " << simtrkhit << std::endl;
+        std::cout << "- Trackhitplane: " << trkhitplane << std::endl;
+        continue;
+      }
+      _resolution_oe->fill(trkhit,simtrkhit,trkhitplane);
+    }
+
 }
 
 void ClusterShapeHistProc::check( LCEvent * /*evt*/ )
