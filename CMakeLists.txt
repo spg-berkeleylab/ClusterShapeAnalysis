@@ -52,6 +52,7 @@ ENDIF()
 ADD_LIBRARY(ClusterShapeAnalysis SHARED
    ./src/ClusterShapeHistProc.cc
    ./src/ClusterHists.cc
+   ./src/TrackerHitResoHists.cc
 )
 
 TARGET_INCLUDE_DIRECTORIES(ClusterShapeAnalysis
@@ -75,6 +76,7 @@ TARGET_COMPILE_DEFINITIONS(ClusterShapeAnalysis
 IF(WITH_PARQUET)
   TARGET_SOURCES(TrackPerf PRIVATE
     ./src/ClusterHists.cc
+    ./src/TrackerHitResoHists.cc
     ./src/ClusterShapeHistProc.cc)
   TARGET_LINK_LIBRARIES(ClusterShapeAnalysis PRIVATE LCParquet)
 ENDIF()
