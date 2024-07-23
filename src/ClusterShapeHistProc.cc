@@ -269,6 +269,9 @@ if (_OERelationCollection != "") {
       _clusters_ve->fill(trkhit);}
 
   // inner tracker barrel
+	int maxIETrkHits=0;
+if (ietrkhitCol) maxIETrkHits = ietrkhitCol->getNumberOfElements();
+for (int i=0; i<maxIETrkHits; ++i)
   for(int i=0; i<ibtrkhitCol->getNumberOfElements(); ++i)
     {
       const EVENT::TrackerHit *trkhit=static_cast<const EVENT::TrackerHit*>(ibtrkhitCol->getElementAt(i));
@@ -277,6 +280,9 @@ if (_OERelationCollection != "") {
       _clusters_ib->fill(trkhit);}
 
   // inner tracker endcap
+	int maxIETrkHits=0;
+if (ietrkhitCol) maxIETrkHits = ietrkhitCol->getNumberOfElements();
+for (int i=0; i<maxIETrkHits; ++i)
   for(int i=0; i<ietrkhitCol->getNumberOfElements(); ++i)
     {
       const EVENT::TrackerHit *trkhit=static_cast<const EVENT::TrackerHit*>(ietrkhitCol->getElementAt(i));
