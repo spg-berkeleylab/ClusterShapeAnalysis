@@ -251,6 +251,9 @@ if (_OERelationCollection != "") {
   
   // vertex barrel tracker hits
   streamlog_out(DEBUG3) << "Num Events in VB Hit Collection: " << vbtrkhitCol->getNumberOfElements() << std::endl;
+	int maxIETrkHits=0;
+if (vbtrkhitCol) maxIETrkHits = vbtrkhitCol->getNumberOfElements();
+for (int i=0; i<maxIETrkHits; ++i)
   for(int i=0; i<vbtrkhitCol->getNumberOfElements(); ++i)
     {
       const EVENT::TrackerHit *trkhit=static_cast<const EVENT::TrackerHit*>(vbtrkhitCol->getElementAt(i));
@@ -261,6 +264,9 @@ if (_OERelationCollection != "") {
 
   // vertex endcap tracker hits
   streamlog_out(DEBUG3) << "Num Events in VE Hit Collection: " << vetrkhitCol->getNumberOfElements() << std::endl;
+	int maxIETrkHits=0;
+if (vetrkhitCol) maxIETrkHits = vetrkhitCol->getNumberOfElements();
+for (int i=0; i<maxIETrkHits; ++i)
   for(int i=0; i<vetrkhitCol->getNumberOfElements(); ++i)
     {
       const EVENT::TrackerHit *trkhit=static_cast<const EVENT::TrackerHit*>(vetrkhitCol->getElementAt(i));
@@ -270,7 +276,7 @@ if (_OERelationCollection != "") {
 
   // inner tracker barrel
 	int maxIETrkHits=0;
-if (ietrkhitCol) maxIETrkHits = ietrkhitCol->getNumberOfElements();
+if (ibtrkhitCol) maxIETrkHits = ibtrkhitCol->getNumberOfElements();
 for (int i=0; i<maxIETrkHits; ++i)
   for(int i=0; i<ibtrkhitCol->getNumberOfElements(); ++i)
     {
@@ -291,6 +297,9 @@ for (int i=0; i<maxIETrkHits; ++i)
       _clusters_ie->fill(trkhit);}
   
   // outer tracker barrel
+	int maxIETrkHits=0;
+if (obtrkhitCol) maxIETrkHits = obtrkhitCol->getNumberOfElements();
+for (int i=0; i<maxIETrkHits; ++i)
   for(int i=0; i<obtrkhitCol->getNumberOfElements(); ++i)
     {
       const EVENT::TrackerHit *trkhit=static_cast<const EVENT::TrackerHit*>(obtrkhitCol->getElementAt(i));
@@ -298,7 +307,10 @@ for (int i=0; i<maxIETrkHits; ++i)
       streamlog_out(DEBUG9) << "Filling OB clusters with OB track hits..." << std::endl;
       _clusters_ob->fill(trkhit);}      
 
-  // outer tracker endcap      
+  // outer tracker endcap  
+	int maxIETrkHits=0;
+if (oetrkhitCol) maxIETrkHits = oetrkhitCol->getNumberOfElements();
+for (int i=0; i<maxIETrkHits; ++i)
   for(int i=0; i<oetrkhitCol->getNumberOfElements(); ++i)
     {
       const EVENT::TrackerHit *trkhit=static_cast<const EVENT::TrackerHit*>(oetrkhitCol->getElementAt(i));
