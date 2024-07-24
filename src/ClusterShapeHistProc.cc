@@ -263,7 +263,7 @@ for (int i=0; i<maxIETrkHits; ++i)
 
   // vertex endcap tracker hits
   streamlog_out(DEBUG3) << "Num Events in VE Hit Collection: " << vetrkhitCol->getNumberOfElements() << std::endl;
-	int maxIETrkHits=0;
+	maxIETrkHits=0;
 if (vetrkhitCol) maxIETrkHits = vetrkhitCol->getNumberOfElements();
 for (int i=0; i<maxIETrkHits; ++i)
     {
@@ -273,7 +273,7 @@ for (int i=0; i<maxIETrkHits; ++i)
       _clusters_ve->fill(trkhit);}
 
   // inner tracker barrel
-	int maxIETrkHits=0;
+	maxIETrkHits=0;
 if (ibtrkhitCol) maxIETrkHits = ibtrkhitCol->getNumberOfElements();
 for (int i=0; i<maxIETrkHits; ++i)
     {
@@ -283,7 +283,7 @@ for (int i=0; i<maxIETrkHits; ++i)
       _clusters_ib->fill(trkhit);}
 
   // inner tracker endcap
-	int maxIETrkHits=0;
+	maxIETrkHits=0;
 if (ietrkhitCol) maxIETrkHits = ietrkhitCol->getNumberOfElements();
 for (int i=0; i<maxIETrkHits; ++i)
     {
@@ -293,7 +293,7 @@ for (int i=0; i<maxIETrkHits; ++i)
       _clusters_ie->fill(trkhit);}
   
   // outer tracker barrel
-	int maxIETrkHits=0;
+	maxIETrkHits=0;
 if (obtrkhitCol) maxIETrkHits = obtrkhitCol->getNumberOfElements();
 for (int i=0; i<maxIETrkHits; ++i)
     {
@@ -303,7 +303,7 @@ for (int i=0; i<maxIETrkHits; ++i)
       _clusters_ob->fill(trkhit);}      
 
   // outer tracker endcap  
-	int maxIETrkHits=0;
+	maxIETrkHits=0;
 if (oetrkhitCol) maxIETrkHits = oetrkhitCol->getNumberOfElements();
 for (int i=0; i<maxIETrkHits; ++i)
     {
@@ -317,7 +317,7 @@ for (int i=0; i<maxIETrkHits; ++i)
   // --- tracker hit resolution histograms
 
   // vertex barrel resolution
-	int maxIETrkHits=0;
+	maxIETrkHits=0;
 if (VBRelationCollection) maxIETrkHits = VBRelationCollection->getNumberOfElements();
 for (int i=0; i<maxIETrkHits; ++i)
     {
@@ -337,7 +337,7 @@ for (int i=0; i<maxIETrkHits; ++i)
     }
 
   // vertex endcap resolution
-	int maxIETrkHits=0;
+	maxIETrkHits=0;
 if (VERelationCollection) maxIETrkHits = VERelationCollection->getNumberOfElements();
 for (int i=0; i<maxIETrkHits; ++i)
     {
@@ -357,7 +357,7 @@ for (int i=0; i<maxIETrkHits; ++i)
     }
 
   // inner tracker barrel hits resolution
-	int maxIETrkHits=0;
+	maxIETrkHits=0;
 if (IBRelationCollection) maxIETrkHits = IBRelationCollection->getNumberOfElements();
 for (int i=0; i<maxIETrkHits; ++i)
     {
@@ -378,7 +378,7 @@ for (int i=0; i<maxIETrkHits; ++i)
   
 
   // outer tracker barrel hits resolution
-	int maxIETrkHits=0;
+	maxIETrkHits=0;
 if (OBRelationCollection) maxIETrkHits = OBRelationCollection->getNumberOfElements();
 for (int i=0; i<maxIETrkHits; ++i)
     {
@@ -399,7 +399,7 @@ for (int i=0; i<maxIETrkHits; ++i)
 
 
   // inner tracker endcap hits resolution
-	int maxIETrkHits=0;
+	maxIETrkHits=0;
 if (IERelationCollection) maxIETrkHits = IERelationCollection->getNumberOfElements();
 for (int i=0; i<maxIETrkHits; ++i)
     {
@@ -420,7 +420,7 @@ for (int i=0; i<maxIETrkHits; ++i)
 
 
   // outer tracker endcap hits resolution
-	int maxIETrkHits=0;
+	maxIETrkHits=0;
 if (OERelationCollection) maxIETrkHits = OERelationCollection->getNumberOfElements();
 for (int i=0; i<maxIETrkHits; ++i)
     {
