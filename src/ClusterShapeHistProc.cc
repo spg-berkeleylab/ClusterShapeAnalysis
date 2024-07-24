@@ -254,7 +254,6 @@ if (_OERelationCollection != "") {
 	int maxIETrkHits=0;
 if (vbtrkhitCol) maxIETrkHits = vbtrkhitCol->getNumberOfElements();
 for (int i=0; i<maxIETrkHits; ++i)
-  for(int i=0; i<vbtrkhitCol->getNumberOfElements(); ++i)
     {
       const EVENT::TrackerHit *trkhit=static_cast<const EVENT::TrackerHit*>(vbtrkhitCol->getElementAt(i));
       h_trackerhit_timing -> Fill(trkhit->getTime());
@@ -267,7 +266,6 @@ for (int i=0; i<maxIETrkHits; ++i)
 	int maxIETrkHits=0;
 if (vetrkhitCol) maxIETrkHits = vetrkhitCol->getNumberOfElements();
 for (int i=0; i<maxIETrkHits; ++i)
-  for(int i=0; i<vetrkhitCol->getNumberOfElements(); ++i)
     {
       const EVENT::TrackerHit *trkhit=static_cast<const EVENT::TrackerHit*>(vetrkhitCol->getElementAt(i));
       h_trackerhit_timing -> Fill(trkhit->getTime());
@@ -278,7 +276,6 @@ for (int i=0; i<maxIETrkHits; ++i)
 	int maxIETrkHits=0;
 if (ibtrkhitCol) maxIETrkHits = ibtrkhitCol->getNumberOfElements();
 for (int i=0; i<maxIETrkHits; ++i)
-  for(int i=0; i<ibtrkhitCol->getNumberOfElements(); ++i)
     {
       const EVENT::TrackerHit *trkhit=static_cast<const EVENT::TrackerHit*>(ibtrkhitCol->getElementAt(i));
       h_trackerhit_timing -> Fill(trkhit->getTime());
@@ -289,7 +286,6 @@ for (int i=0; i<maxIETrkHits; ++i)
 	int maxIETrkHits=0;
 if (ietrkhitCol) maxIETrkHits = ietrkhitCol->getNumberOfElements();
 for (int i=0; i<maxIETrkHits; ++i)
-  for(int i=0; i<ietrkhitCol->getNumberOfElements(); ++i)
     {
       const EVENT::TrackerHit *trkhit=static_cast<const EVENT::TrackerHit*>(ietrkhitCol->getElementAt(i));
       h_trackerhit_timing -> Fill(trkhit->getTime());
@@ -300,7 +296,6 @@ for (int i=0; i<maxIETrkHits; ++i)
 	int maxIETrkHits=0;
 if (obtrkhitCol) maxIETrkHits = obtrkhitCol->getNumberOfElements();
 for (int i=0; i<maxIETrkHits; ++i)
-  for(int i=0; i<obtrkhitCol->getNumberOfElements(); ++i)
     {
       const EVENT::TrackerHit *trkhit=static_cast<const EVENT::TrackerHit*>(obtrkhitCol->getElementAt(i));
       h_trackerhit_timing -> Fill(trkhit->getTime());
@@ -311,7 +306,6 @@ for (int i=0; i<maxIETrkHits; ++i)
 	int maxIETrkHits=0;
 if (oetrkhitCol) maxIETrkHits = oetrkhitCol->getNumberOfElements();
 for (int i=0; i<maxIETrkHits; ++i)
-  for(int i=0; i<oetrkhitCol->getNumberOfElements(); ++i)
     {
       const EVENT::TrackerHit *trkhit=static_cast<const EVENT::TrackerHit*>(oetrkhitCol->getElementAt(i));
       h_trackerhit_timing -> Fill(trkhit->getTime());
@@ -326,7 +320,6 @@ for (int i=0; i<maxIETrkHits; ++i)
 	int maxIETrkHits=0;
 if (VBRelationCollection) maxIETrkHits = VBRelationCollection->getNumberOfElements();
 for (int i=0; i<maxIETrkHits; ++i)
-  for(int i=0; i<VBRelationCollection->getNumberOfElements(); ++i)
     {
       streamlog_out(DEBUG3) << "Events in VB Relation Collection: " << VBRelationCollection->getNumberOfElements() << std::endl;
       EVENT::LCRelation *rel=static_cast<EVENT::LCRelation*>(VBRelationCollection->getElementAt(i));
@@ -347,7 +340,6 @@ for (int i=0; i<maxIETrkHits; ++i)
 	int maxIETrkHits=0;
 if (VERelationCollection) maxIETrkHits = VERelationCollection->getNumberOfElements();
 for (int i=0; i<maxIETrkHits; ++i)
-  for(int i=0; i<VERelationCollection->getNumberOfElements(); ++i)
     {
       streamlog_out(DEBUG3) << "Events in VE Relation Collection: " << VERelationCollection->getNumberOfElements() << std::endl;
       EVENT::LCRelation *rel=static_cast<EVENT::LCRelation*>(VERelationCollection->getElementAt(i));
@@ -368,7 +360,6 @@ for (int i=0; i<maxIETrkHits; ++i)
 	int maxIETrkHits=0;
 if (IBRelationCollection) maxIETrkHits = IBRelationCollection->getNumberOfElements();
 for (int i=0; i<maxIETrkHits; ++i)
-  for(int i=0; i<IBRelationCollection->getNumberOfElements(); ++i)
     {
       streamlog_out(DEBUG3) << "Events in IB Relation Collection: " << IBRelationCollection->getNumberOfElements() << std::endl;
       EVENT::LCRelation *rel=static_cast<EVENT::LCRelation*>(IBRelationCollection->getElementAt(i));
@@ -390,7 +381,6 @@ for (int i=0; i<maxIETrkHits; ++i)
 	int maxIETrkHits=0;
 if (OBRelationCollection) maxIETrkHits = OBRelationCollection->getNumberOfElements();
 for (int i=0; i<maxIETrkHits; ++i)
-  for(int i=0; i<OBRelationCollection->getNumberOfElements(); ++i)
     {
       streamlog_out(DEBUG3) << "Events in OB Relation Collection: " << OBRelationCollection->getNumberOfElements() << std::endl;
       EVENT::LCRelation *rel=static_cast<EVENT::LCRelation*>(OBRelationCollection->getElementAt(i));
@@ -412,7 +402,6 @@ for (int i=0; i<maxIETrkHits; ++i)
 	int maxIETrkHits=0;
 if (IERelationCollection) maxIETrkHits = IERelationCollection->getNumberOfElements();
 for (int i=0; i<maxIETrkHits; ++i)
-  for(int i=0; i<IERelationCollection->getNumberOfElements(); ++i)
     {
       streamlog_out(DEBUG3) << "Events in IE Relation Collection: " << IERelationCollection->getNumberOfElements() << std::endl;
       EVENT::LCRelation *rel=static_cast<EVENT::LCRelation*>(IERelationCollection->getElementAt(i));
@@ -434,7 +423,6 @@ for (int i=0; i<maxIETrkHits; ++i)
 	int maxIETrkHits=0;
 if (OERelationCollection) maxIETrkHits = OERelationCollection->getNumberOfElements();
 for (int i=0; i<maxIETrkHits; ++i)
-  for(int i=0; i<OERelationCollection->getNumberOfElements(); ++i)
     {
       streamlog_out(DEBUG3) << "Events in OE Relation Collection: " << OERelationCollection->getNumberOfElements() << std::endl;
       EVENT::LCRelation *rel=static_cast<EVENT::LCRelation*>(OERelationCollection->getElementAt(i));
