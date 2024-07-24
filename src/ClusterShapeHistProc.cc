@@ -323,6 +323,9 @@ for (int i=0; i<maxIETrkHits; ++i)
   // --- tracker hit resolution histograms
 
   // vertex barrel resolution
+	int maxIETrkHits=0;
+if (VBRelationCollection) maxIETrkHits = VBRelationCollection->getNumberOfElements();
+for (int i=0; i<maxIETrkHits; ++i)
   for(int i=0; i<VBRelationCollection->getNumberOfElements(); ++i)
     {
       streamlog_out(DEBUG3) << "Events in VB Relation Collection: " << VBRelationCollection->getNumberOfElements() << std::endl;
@@ -341,6 +344,9 @@ for (int i=0; i<maxIETrkHits; ++i)
     }
 
   // vertex endcap resolution
+	int maxIETrkHits=0;
+if (VERelationCollection) maxIETrkHits = VERelationCollection->getNumberOfElements();
+for (int i=0; i<maxIETrkHits; ++i)
   for(int i=0; i<VERelationCollection->getNumberOfElements(); ++i)
     {
       streamlog_out(DEBUG3) << "Events in VE Relation Collection: " << VERelationCollection->getNumberOfElements() << std::endl;
@@ -359,6 +365,9 @@ for (int i=0; i<maxIETrkHits; ++i)
     }
 
   // inner tracker barrel hits resolution
+	int maxIETrkHits=0;
+if (IBRelationCollection) maxIETrkHits = IBRelationCollection->getNumberOfElements();
+for (int i=0; i<maxIETrkHits; ++i)
   for(int i=0; i<IBRelationCollection->getNumberOfElements(); ++i)
     {
       streamlog_out(DEBUG3) << "Events in IB Relation Collection: " << IBRelationCollection->getNumberOfElements() << std::endl;
@@ -378,6 +387,9 @@ for (int i=0; i<maxIETrkHits; ++i)
   
 
   // outer tracker barrel hits resolution
+	int maxIETrkHits=0;
+if (OBRelationCollection) maxIETrkHits = OBRelationCollection->getNumberOfElements();
+for (int i=0; i<maxIETrkHits; ++i)
   for(int i=0; i<OBRelationCollection->getNumberOfElements(); ++i)
     {
       streamlog_out(DEBUG3) << "Events in OB Relation Collection: " << OBRelationCollection->getNumberOfElements() << std::endl;
@@ -397,6 +409,9 @@ for (int i=0; i<maxIETrkHits; ++i)
 
 
   // inner tracker endcap hits resolution
+	int maxIETrkHits=0;
+if (IERelationCollection) maxIETrkHits = IERelationCollection->getNumberOfElements();
+for (int i=0; i<maxIETrkHits; ++i)
   for(int i=0; i<IERelationCollection->getNumberOfElements(); ++i)
     {
       streamlog_out(DEBUG3) << "Events in IE Relation Collection: " << IERelationCollection->getNumberOfElements() << std::endl;
@@ -416,6 +431,9 @@ for (int i=0; i<maxIETrkHits; ++i)
 
 
   // outer tracker endcap hits resolution
+	int maxIETrkHits=0;
+if (OERelationCollection) maxIETrkHits = OERelationCollection->getNumberOfElements();
+for (int i=0; i<maxIETrkHits; ++i)
   for(int i=0; i<OERelationCollection->getNumberOfElements(); ++i)
     {
       streamlog_out(DEBUG3) << "Events in OE Relation Collection: " << OERelationCollection->getNumberOfElements() << std::endl;
