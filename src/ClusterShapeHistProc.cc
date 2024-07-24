@@ -181,67 +181,67 @@ void ClusterShapeHistProc::processEvent( LCEvent * evt )
   if( mcpCol->getTypeName() != lcio::LCIO::MCPARTICLE )
     { throw EVENT::Exception( "Invalid collection type: " + mcpCol->getTypeName() ) ; }
 
-  LCCollection* vbtrkhitCol  =evt->getCollection(_vbtrkhitColName);
+
 	LCCollection* vbtrkhitCol = nullptr;
 if (_vbtrkhitColName != "") {
    vbtrkhitCol = evt->getCollection(_vbtrkhitColName);
 }
-  LCCollection* ibtrkhitCol  =evt->getCollection(_ibtrkhitColName);
+
 	LCCollection* ibtrkhitCol = nullptr;
 if (_ibtrkhitColName != "") {
    ibtrkhitCol = evt->getCollection(_ibtrkhitColName);
 }
-  LCCollection* obtrkhitCol  =evt->getCollection(_obtrkhitColName);
+  
 	LCCollection* obtrkhitCol = nullptr;
 if (_obtrkhitColName != "") {
    obtrkhitCol = evt->getCollection(_obtrkhitColName);
 }
-  LCCollection* vetrkhitCol  =evt->getCollection(_vetrkhitColName);
+  
 	LCCollection* vetrkhitCol = nullptr;
 if (_vetrkhitColName != "") {
    vetrkhitCol = evt->getCollection(_vetrkhitColName);
 }
-  LCCollection* ietrkhitCol  =evt->getCollection(_ietrkhitColName);
+  
 	LCCollection* ietrkhitCol = nullptr;
 if (_ietrkhitColName != "") {
    ietrkhitCol = evt->getCollection(_ietrkhitColName);
 }
-  LCCollection* oetrkhitCol  =evt->getCollection(_oetrkhitColName);
+  
 	LCCollection* oetrkhitCol = nullptr;
 if (_oetrkhitColName != "") {
    oetrkhitCol = evt->getCollection(_oetrkhitColName);
 }
-  LCCollection* VBRelationCollection =evt->getCollection(_VBRelationCollection);
+  
 	LCCollection* VBRelationCollection = nullptr;
 if (_VBRelationCollection != "") {
    VBRelationCollection = evt->getCollection(_VBRelationCollection);
 }
 	
-  LCCollection* IBRelationCollection =evt->getCollection(_IBRelationCollection);
+  
 	LCCollection* IBRelationCollection = nullptr;
 if (_IBRelationCollection != "") {
    IBRelationCollection = evt->getCollection(_IBRelationCollection);
 }
 	
-  LCCollection* OBRelationCollection =evt->getCollection(_OBRelationCollection);
+  
 	LCCollection* OBRelationCollection = nullptr;
 if (_OBRelationCollection != "") {
    OBRelationCollection = evt->getCollection(_OBRelationCollection);
 }
 	
-  LCCollection* VERelationCollection =evt->getCollection(_VERelationCollection);
+  
 	LCCollection* VERelationCollection = nullptr;
 if (_VERelationCollection != "") {
    VERelationCollection = evt->getCollection(_VERelationCollection);
 }
 	
-  LCCollection* IERelationCollection =evt->getCollection(_IERelationCollection);
+  
 	LCCollection* IERelationCollection = nullptr;
 if (_IERelationCollection != "") {
    IERelationCollection = evt->getCollection(_IERelationCollection);
 }
 	
-  LCCollection* OERelationCollection =evt->getCollection(_OERelationCollection);
+  
 	LCCollection* OERelationCollection = nullptr;
 if (_OERelationCollection != "") {
    OERelationCollection = evt->getCollection(_OERelationCollection);
