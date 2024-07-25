@@ -30,49 +30,49 @@ ClusterShapeHistProc::ClusterShapeHistProc()
   // register steering parameters: name, description, class-variable, default value
   // --- List of tracker cluster collections
   registerInputCollection( LCIO::TRACKERHIT,
-			   "VBTrackerHitsCollection" , 
+			   "" , 
 			   "Name of vertex barrel tracker hits collection",
 			   _vbtrkhitColName,
 			   _vbtrkhitColName
 			   );     
 
   registerInputCollection( LCIO::TRACKERHIT,
-			   "IBTrackerHitsCollection" , 
+			   "" , 
 			   "Name of inner barrel tracker hits collection",
 			   _ibtrkhitColName,
 			   _ibtrkhitColName
 			   );  
 
   registerInputCollection( LCIO::TRACKERHIT,
-			   "OBTrackerHitsCollection" , 
+			   "" , 
 			   "Name of outer barrel tracker hits collection",
 			   _obtrkhitColName,
 			   _obtrkhitColName
 			   );  
 
   registerInputCollection( LCIO::TRACKERHIT,
-			   "VETrackerHitsCollection" , 
+			   "" , 
 			   "Name of vertex endcap tracker hits collection",
 			   _vetrkhitColName,
 			   _vetrkhitColName
 			   );  
 
   registerInputCollection( LCIO::TRACKERHIT,
-			   "IETrackerHitsCollection" , 
+			   "" , 
 			   "Name of inner endcap tracker hits collection",
 			   _ietrkhitColName,
 			   _ietrkhitColName
 			   );     
 
   registerInputCollection( LCIO::TRACKERHIT,
-			   "OETrackerHitsCollection" , 
+			   "" , 
 			   "Name of outer endcap tracker hits collection",
 			   _oetrkhitColName,
 			   _oetrkhitColName
 			   );
   // --- Collection of MC particles
   registerInputCollection( LCIO::MCPARTICLE,
-			   "MCParticleCollection" , 
+			   "" , 
 			   "Name of the MCParticle collection"  ,
 			   _mcpColName,
 			   _mcpColName
@@ -80,42 +80,42 @@ ClusterShapeHistProc::ClusterShapeHistProc()
 
   // --- Relationship reco-truth for tracker clusters
   registerInputCollection( LCIO::LCRELATION,
-		     "VBRelationCollection" ,
+		     "" ,
 			   "Name of the input vertex barrel relation collection",
 			   _VBRelationCollection,
 		     _VBRelationCollection
 		 	    );
 
     registerInputCollection( LCIO::LCRELATION,
-		     "IBRelationCollection" ,
+		     "" ,
 			   "Name of the input inner tracker barrel relation collection",
 			   _IBRelationCollection,
 		     _IBRelationCollection
 		 	    );
 
     registerInputCollection( LCIO::LCRELATION,
-		     "OBRelationCollection" ,
+		     "" ,
 			   "Name of the input outer tracker barrel relation collection",
 			   _OBRelationCollection,
 		     _OBRelationCollection
 		 	    );
 
     registerInputCollection( LCIO::LCRELATION,
-		     "VERelationCollection" ,
+		     "" ,
 			   "Name of the input vertex endcap relation collection",
 			   _VERelationCollection,
 		     _VERelationCollection
 		 	    );
 
     registerInputCollection( LCIO::LCRELATION,
-		     "IERelationCollection" ,
+		     "" ,
 			   "Name of the input inner tracker endcap relation collection",
 			   _IERelationCollection,
 		     _IERelationCollection
 		 	    );
 
     registerInputCollection( LCIO::LCRELATION,
-		     "OERelationCollection" ,
+		     "" ,
 			   "Name of the input outer tracker endcap relation collection",
 			   _OERelationCollection,
 		     _OERelationCollection
