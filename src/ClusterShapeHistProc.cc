@@ -163,6 +163,9 @@ void ClusterShapeHistProc::init()
   _resolution_oe=std::make_shared<TrackerHitResoHists>();
   _clusters_oe=std::make_shared<ClusterHists>();
 
+ tree->cd("../");
+ h_trackerhit_timing = new TH1F("hit_timing", "Time of arrival of hits [ns]", 110, -10, 100);
+
 }
 
 void ClusterShapeHistProc::processRunHeader( LCRunHeader* /*run*/)
