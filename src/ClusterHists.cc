@@ -27,7 +27,7 @@ ClusterHists::ClusterHists()
   h_hits_by_layer   = new TH1F("numhits_by_layer"      , ";Layer Index; Number of Hits",8,0,8);
   h_theta         = new TH1F("theta"                 , ";Theta;Number of Clusters"       ,100,0,3.15);
   h_cluster_edep     = new TH1F("Clusters_edep"          , ";Energy Deposited (GeV);Clusters" ,100,0,0.0005);
-  h_hit_edep     = new TH1F("Hits_edep"          , ";Number of electrons;Hits" ,5000,0,50000);
+  h_hit_edep     = new TH1F("Hits_edep"          , ";Deposited charge (electrons);Hits" ,5000,0,50000);
   h_edep_r   = new TH2F("edep_vs_r" , ";Cluster R (x^2+y^2)^(1/2) (mm); Energy Deposited (GeV)" , 100, 20,  120,  100,  0,  0.002 );
   h_edep_cluster   = new TH2F("edep_vs_cluster_size" , "; Energy Deposited (GeV); Total Cluster Size" ,100,  0,  0.002, 100, -0.5, 99.5 );
 

@@ -167,10 +167,10 @@ void ClusterShapeHistProc::init()
 
   tree->cd("../");
   h_trackerhit_timing = new TH1F("hit_timing", "Time of arrival of hits [ns]", 110, -10, 100);
-  h_clusters_by_layer   = new TH1F("numClusters_by_layer"      , ";Layer Index; Number of Clusters",20,0,20);
-  h_hits_by_layer   = new TH1F("numhits_by_layer"      , ";Layer Index; Number of Hits",20,0,20);
-  h_clusters_by_layer_BX   = new TH1F("numClusters_by_layer_BX"      , ";Layer Index; Number of Clusters / 1 BX",20,0,20);
-  h_hits_by_layer_BX   = new TH1F("numhits_by_layer_BX"      , ";Layer Index; Number of Hits / 1 BX",20,0,20);
+  h_clusters_by_layer   = new TH1F("numClusters_by_layer"      , ";Layer Index; Number of Clusters",15,0,15);
+  h_hits_by_layer   = new TH1F("numhits_by_layer"      , ";Layer Index; Number of Hits",15,0,15);
+  h_clusters_by_layer_BX   = new TH1F("numClusters_by_layer_BX"      , ";Layer Index; Number of Clusters / 1 BX",15,0,15);
+  h_hits_by_layer_BX   = new TH1F("numhits_by_layer_BX"      , ";Layer Index; Number of Hits / 1 BX",15,0,15);
   nEvtTotal = 0;
 }
 
@@ -263,9 +263,9 @@ void ClusterShapeHistProc::processEvent( LCEvent * evt )
   
   // vertex barrel tracker hits
   streamlog_out(DEBUG3) << "Num Events in VB Hit Collection: " << vbtrkhitCol->getNumberOfElements() << std::endl;
-  int maxIETrkHits=0;
-  if (vbtrkhitCol) maxIETrkHits = vbtrkhitCol->getNumberOfElements();
-  for (int i=0; i<maxIETrkHits; ++i)
+  int maxTrkHits=0;
+  if (vbtrkhitCol) maxTrkHits = vbtrkhitCol->getNumberOfElements();
+  for (int i=0; i<maxTrkHits; ++i)
     {
       const EVENT::TrackerHit *trkhit=static_cast<const EVENT::TrackerHit*>(vbtrkhitCol->getElementAt(i));
       h_trackerhit_timing -> Fill(trkhit->getTime());
@@ -277,9 +277,9 @@ void ClusterShapeHistProc::processEvent( LCEvent * evt )
 
   // vertex endcap tracker hits
   streamlog_out(DEBUG3) << "Num Events in VE Hit Collection: " << vetrkhitCol->getNumberOfElements() << std::endl;
-  maxIETrkHits=0;
-  if (vetrkhitCol) maxIETrkHits = vetrkhitCol->getNumberOfElements();
-  for (int i=0; i<maxIETrkHits; ++i)
+  maxTrkHits=0;
+  if (vetrkhitCol) maxTrkHits = vetrkhitCol->getNumberOfElements();
+  for (int i=0; i<maxTrkHits; ++i)
     {
       const EVENT::TrackerHit *trkhit=static_cast<const EVENT::TrackerHit*>(vetrkhitCol->getElementAt(i));
       h_trackerhit_timing -> Fill(trkhit->getTime());
@@ -289,9 +289,9 @@ void ClusterShapeHistProc::processEvent( LCEvent * evt )
     }
 
   // inner tracker barrel
-  maxIETrkHits=0;
-  if (ibtrkhitCol) maxIETrkHits = ibtrkhitCol->getNumberOfElements();
-  for (int i=0; i<maxIETrkHits; ++i)
+  maxTrkHits=0;
+  if (ibtrkhitCol) maxTrkHits = ibtrkhitCol->getNumberOfElements();
+  for (int i=0; i<maxTrkHits; ++i)
     {
       const EVENT::TrackerHit *trkhit=static_cast<const EVENT::TrackerHit*>(ibtrkhitCol->getElementAt(i));
       h_trackerhit_timing -> Fill(trkhit->getTime());
@@ -301,21 +301,21 @@ void ClusterShapeHistProc::processEvent( LCEvent * evt )
     }
 
   // inner tracker endcap
-  maxIETrkHits=0;
-  if (ietrkhitCol) maxIETrkHits = ietrkhitCol->getNumberOfElements();
-  for (int i=0; i<maxIETrkHits; ++i)
+  maxTrkHits=0;
+  if (ietrkhitCol) maxTrkHits = ietrkhitCol->getNumberOfElements();
+  for (int i=0; i<maxTrkHits; ++i)
     {
       const EVENT::TrackerHit *trkhit=static_cast<const EVENT::TrackerHit*>(ietrkhitCol->getElementAt(i));
       h_trackerhit_timing -> Fill(trkhit->getTime());
       streamlog_out(DEBUG9) << "Filling IE clusters with IE track hits..." << std::endl;
       _clusters_ie->fill(trkhit);
-      LayerInfo(trkhit, 8);
+      //      LayerInfo(trkhit, 8);
     }
   
   // outer tracker barrel
-  maxIETrkHits=0;
-  if (obtrkhitCol) maxIETrkHits = obtrkhitCol->getNumberOfElements();
-  for (int i=0; i<maxIETrkHits; ++i)
+  maxTrkHits=0;
+  if (obtrkhitCol) maxTrkHits = obtrkhitCol->getNumberOfElements();
+  for (int i=0; i<maxTrkHits; ++i)
     {
       const EVENT::TrackerHit *trkhit=static_cast<const EVENT::TrackerHit*>(obtrkhitCol->getElementAt(i));
       h_trackerhit_timing -> Fill(trkhit->getTime());
@@ -325,24 +325,24 @@ void ClusterShapeHistProc::processEvent( LCEvent * evt )
     }      
 
   // outer tracker endcap  
-  maxIETrkHits=0;
-  if (oetrkhitCol) maxIETrkHits = oetrkhitCol->getNumberOfElements();
-  for (int i=0; i<maxIETrkHits; ++i)
+  maxTrkHits=0;
+  if (oetrkhitCol) maxTrkHits = oetrkhitCol->getNumberOfElements();
+  for (int i=0; i<maxTrkHits; ++i)
     {
       const EVENT::TrackerHit *trkhit=static_cast<const EVENT::TrackerHit*>(oetrkhitCol->getElementAt(i));
       h_trackerhit_timing -> Fill(trkhit->getTime());
       streamlog_out(DEBUG9) << "Filling OE clusters with OE track hits..." << std::endl;
       _clusters_oe->fill(trkhit);
-      LayerInfo(trkhit, 8);
+      //      LayerInfo(trkhit, 8);
     }
 
    
   // --- tracker hit resolution histograms
 
   // vertex barrel resolution
-  maxIETrkHits=0;
-  if (VBRelationCollection) maxIETrkHits = VBRelationCollection->getNumberOfElements();
-  for (int i=0; i<maxIETrkHits; ++i)
+  maxTrkHits=0;
+  if (VBRelationCollection) maxTrkHits = VBRelationCollection->getNumberOfElements();
+  for (int i=0; i<maxTrkHits; ++i)
     {
       streamlog_out(DEBUG3) << "Events in VB Relation Collection: " << VBRelationCollection->getNumberOfElements() << std::endl;
       EVENT::LCRelation *rel=static_cast<EVENT::LCRelation*>(VBRelationCollection->getElementAt(i));
@@ -360,9 +360,9 @@ void ClusterShapeHistProc::processEvent( LCEvent * evt )
     }
 
   // vertex endcap resolution
-  maxIETrkHits=0;
-  if (VERelationCollection) maxIETrkHits = VERelationCollection->getNumberOfElements();
-  for (int i=0; i<maxIETrkHits; ++i)
+  maxTrkHits=0;
+  if (VERelationCollection) maxTrkHits = VERelationCollection->getNumberOfElements();
+  for (int i=0; i<maxTrkHits; ++i)
     {
       streamlog_out(DEBUG3) << "Events in VE Relation Collection: " << VERelationCollection->getNumberOfElements() << std::endl;
       EVENT::LCRelation *rel=static_cast<EVENT::LCRelation*>(VERelationCollection->getElementAt(i));
@@ -380,9 +380,9 @@ void ClusterShapeHistProc::processEvent( LCEvent * evt )
     }
 
   // inner tracker barrel hits resolution
-  maxIETrkHits=0;
-  if (IBRelationCollection) maxIETrkHits = IBRelationCollection->getNumberOfElements();
-  for (int i=0; i<maxIETrkHits; ++i)
+  maxTrkHits=0;
+  if (IBRelationCollection) maxTrkHits = IBRelationCollection->getNumberOfElements();
+  for (int i=0; i<maxTrkHits; ++i)
     {
       streamlog_out(DEBUG3) << "Events in IB Relation Collection: " << IBRelationCollection->getNumberOfElements() << std::endl;
       EVENT::LCRelation *rel=static_cast<EVENT::LCRelation*>(IBRelationCollection->getElementAt(i));
@@ -401,9 +401,9 @@ void ClusterShapeHistProc::processEvent( LCEvent * evt )
   
 
   // outer tracker barrel hits resolution
-  maxIETrkHits=0;
-  if (OBRelationCollection) maxIETrkHits = OBRelationCollection->getNumberOfElements();
-  for (int i=0; i<maxIETrkHits; ++i)
+  maxTrkHits=0;
+  if (OBRelationCollection) maxTrkHits = OBRelationCollection->getNumberOfElements();
+  for (int i=0; i<maxTrkHits; ++i)
     {
       streamlog_out(DEBUG3) << "Events in OB Relation Collection: " << OBRelationCollection->getNumberOfElements() << std::endl;
       EVENT::LCRelation *rel=static_cast<EVENT::LCRelation*>(OBRelationCollection->getElementAt(i));
@@ -422,9 +422,9 @@ void ClusterShapeHistProc::processEvent( LCEvent * evt )
 
 
   // inner tracker endcap hits resolution
-  maxIETrkHits=0;
-  if (IERelationCollection) maxIETrkHits = IERelationCollection->getNumberOfElements();
-  for (int i=0; i<maxIETrkHits; ++i)
+  maxTrkHits=0;
+  if (IERelationCollection) maxTrkHits = IERelationCollection->getNumberOfElements();
+  for (int i=0; i<maxTrkHits; ++i)
     {
       streamlog_out(DEBUG3) << "Events in IE Relation Collection: " << IERelationCollection->getNumberOfElements() << std::endl;
       EVENT::LCRelation *rel=static_cast<EVENT::LCRelation*>(IERelationCollection->getElementAt(i));
@@ -443,9 +443,9 @@ void ClusterShapeHistProc::processEvent( LCEvent * evt )
 
 
   // outer tracker endcap hits resolution
-  maxIETrkHits=0;
-  if (OERelationCollection) maxIETrkHits = OERelationCollection->getNumberOfElements();
-  for (int i=0; i<maxIETrkHits; ++i)
+  maxTrkHits=0;
+  if (OERelationCollection) maxTrkHits = OERelationCollection->getNumberOfElements();
+  for (int i=0; i<maxTrkHits; ++i)
     {
       streamlog_out(DEBUG3) << "Events in OE Relation Collection: " << OERelationCollection->getNumberOfElements() << std::endl;
       EVENT::LCRelation *rel=static_cast<EVENT::LCRelation*>(OERelationCollection->getElementAt(i));
