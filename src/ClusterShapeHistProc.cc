@@ -14,6 +14,8 @@
 #include <EVENT/SimTrackerHit.h>
 #include <EVENT/TrackerHitPlane.h>
 #include <IMPL/TrackerHitPlaneImpl.h>
+#include <UTIL/CellIDDecoder.h>
+#include <UTIL/LCTrackerConf.h>
 
 #include <marlin/AIDAProcessor.h>
 
@@ -165,7 +167,11 @@ void ClusterShapeHistProc::init()
 
   tree->cd("../");
   h_trackerhit_timing = new TH1F("hit_timing", "Time of arrival of hits [ns]", 110, -10, 100);
-
+  h_clusters_by_layer   = new TH1F("numClusters_by_layer"      , ";Layer Index; Number of Clusters",20,0,20);
+  h_hits_by_layer   = new TH1F("numhits_by_layer"      , ";Layer Index; Number of Hits",20,0,20);
+  h_clusters_by_layer_BX   = new TH1F("numClusters_by_layer_BX"      , ";Layer Index; Number of Clusters / 1 BX",20,0,20);
+  h_hits_by_layer_BX   = new TH1F("numhits_by_layer_BX"      , ";Layer Index; Number of Hits / 1 BX",20,0,20);
+  nEvtTotal = 0;
 }
 
 void ClusterShapeHistProc::processRunHeader( LCRunHeader* /*run*/)
@@ -177,6 +183,8 @@ void ClusterShapeHistProc::processEvent( LCEvent * evt )
   //
   // Get object required collections and create lists
   // to keep track of unsaved objects.
+
+  nEvtTotal++;
 
   // --- MCParticles
 
@@ -262,7 +270,9 @@ void ClusterShapeHistProc::processEvent( LCEvent * evt )
       const EVENT::TrackerHit *trkhit=static_cast<const EVENT::TrackerHit*>(vbtrkhitCol->getElementAt(i));
       h_trackerhit_timing -> Fill(trkhit->getTime());
       streamlog_out(DEBUG9) << "Filling VB clusters with VB track hits..." << std::endl;
-      _clusters_vb->fill(trkhit);}
+      _clusters_vb->fill(trkhit);
+      LayerInfo(trkhit, 0);
+    }
 
 
   // vertex endcap tracker hits
@@ -274,7 +284,9 @@ void ClusterShapeHistProc::processEvent( LCEvent * evt )
       const EVENT::TrackerHit *trkhit=static_cast<const EVENT::TrackerHit*>(vetrkhitCol->getElementAt(i));
       h_trackerhit_timing -> Fill(trkhit->getTime());
       streamlog_out(DEBUG9) << "Filling VE clusters with VE track hits..." << std::endl;
-      _clusters_ve->fill(trkhit);}
+      _clusters_ve->fill(trkhit);
+      LayerInfo(trkhit, 0);
+    }
 
   // inner tracker barrel
   maxIETrkHits=0;
@@ -284,7 +296,9 @@ void ClusterShapeHistProc::processEvent( LCEvent * evt )
       const EVENT::TrackerHit *trkhit=static_cast<const EVENT::TrackerHit*>(ibtrkhitCol->getElementAt(i));
       h_trackerhit_timing -> Fill(trkhit->getTime());
       streamlog_out(DEBUG9) << "Filling IB clusters with IB track hits..." << std::endl;
-      _clusters_ib->fill(trkhit);}
+      _clusters_ib->fill(trkhit);
+      LayerInfo(trkhit, 8);
+    }
 
   // inner tracker endcap
   maxIETrkHits=0;
@@ -294,7 +308,9 @@ void ClusterShapeHistProc::processEvent( LCEvent * evt )
       const EVENT::TrackerHit *trkhit=static_cast<const EVENT::TrackerHit*>(ietrkhitCol->getElementAt(i));
       h_trackerhit_timing -> Fill(trkhit->getTime());
       streamlog_out(DEBUG9) << "Filling IE clusters with IE track hits..." << std::endl;
-      _clusters_ie->fill(trkhit);}
+      _clusters_ie->fill(trkhit);
+      LayerInfo(trkhit, 8);
+    }
   
   // outer tracker barrel
   maxIETrkHits=0;
@@ -304,7 +320,9 @@ void ClusterShapeHistProc::processEvent( LCEvent * evt )
       const EVENT::TrackerHit *trkhit=static_cast<const EVENT::TrackerHit*>(obtrkhitCol->getElementAt(i));
       h_trackerhit_timing -> Fill(trkhit->getTime());
       streamlog_out(DEBUG9) << "Filling OB clusters with OB track hits..." << std::endl;
-      _clusters_ob->fill(trkhit);}      
+      _clusters_ob->fill(trkhit);
+      LayerInfo(trkhit, 8);
+    }      
 
   // outer tracker endcap  
   maxIETrkHits=0;
@@ -315,6 +333,7 @@ void ClusterShapeHistProc::processEvent( LCEvent * evt )
       h_trackerhit_timing -> Fill(trkhit->getTime());
       streamlog_out(DEBUG9) << "Filling OE clusters with OE track hits..." << std::endl;
       _clusters_oe->fill(trkhit);
+      LayerInfo(trkhit, 8);
     }
 
    
@@ -445,8 +464,30 @@ void ClusterShapeHistProc::processEvent( LCEvent * evt )
 
 }
 
+void ClusterShapeHistProc::LayerInfo(const EVENT::TrackerHit* trkhit, int offset)
+{
+  const lcio::LCObjectVec &rawHits = trkhit->getRawHits();
+  float loopsize = rawHits.size();
+
+  //Get hit layer                                                                                                                                                                                    
+  std::string _encoderString = lcio::LCTrackerCellID::encoding_string();
+  UTIL::CellIDDecoder<lcio::TrackerHit> decoder(_encoderString);
+  uint32_t layerID = decoder(trkhit)["layer"];
+  h_clusters_by_layer->Fill(layerID+offset);
+  h_clusters_by_layer_BX->Fill(layerID+offset);
+  for (size_t j=0; j<loopsize; ++j) {
+    h_hits_by_layer->Fill(layerID+offset);
+    h_hits_by_layer_BX->Fill(layerID+offset);
+  }
+
+  return;
+}
 void ClusterShapeHistProc::check( LCEvent * /*evt*/ )
 { }
 
 void ClusterShapeHistProc::end()
-{ }
+{
+  std::cout<<"Total events = "<<nEvtTotal<<std::endl;
+  h_clusters_by_layer_BX->Scale(1.0/nEvtTotal);
+  h_hits_by_layer_BX->Scale(1.0/nEvtTotal);
+}

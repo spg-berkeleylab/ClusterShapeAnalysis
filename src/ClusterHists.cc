@@ -23,11 +23,13 @@ ClusterHists::ClusterHists()
   h_cluster_pos_1 = new TH2F("cluster_position_1"    , ";z; r"                         , 100, -500, 500, 100, 0, 200);
   h_cluster_pos_2 = new TH2F("cluster_position_2"    , ";z; r"                         , 100, -500, 500, 100, 0, 200);
   h_cluster_pos_3 = new TH2F("cluster_position_3"    , ";z; r"                         , 100, -500, 500, 100, 0, 200);
-  hits_by_layer   = new TH1F("numhits_by_layer"      , ";Layer Index; Number of Clusters",8,0,8);
+  h_clusters_by_layer   = new TH1F("numClusters_by_layer"      , ";Layer Index; Number of Clusters",8,0,8);
+  h_hits_by_layer   = new TH1F("numhits_by_layer"      , ";Layer Index; Number of Hits",8,0,8);
   h_theta         = new TH1F("theta"                 , ";Theta;Number of Clusters"       ,100,0,3.15);
-  h_edep     = new TH1F("edep"          , ";Energy Deposited (GeV);Clusters" ,100,0,0.0005);
+  h_cluster_edep     = new TH1F("Clusters_edep"          , ";Energy Deposited (GeV);Clusters" ,100,0,0.0005);
+  h_hit_edep     = new TH1F("Hits_edep"          , ";Number of electrons;Hits" ,5000,0,50000);
   h_edep_r   = new TH2F("edep_vs_r" , ";Cluster R (x^2+y^2)^(1/2) (mm); Energy Deposited (GeV)" , 100, 20,  120,  100,  0,  0.002 );
-  h_edep_cluster   = new TH2F("edep_vs_cluster size" , "; Energy Deposited (GeV); Total Cluster Size" ,100,  0,  0.002, 100, -0.5, 99.5 );
+  h_edep_cluster   = new TH2F("edep_vs_cluster_size" , "; Energy Deposited (GeV); Total Cluster Size" ,100,  0,  0.002, 100, -0.5, 99.5 );
 
   // Create position histograms for tracker hits
   int numbins_all = 1000;
@@ -41,6 +43,27 @@ ClusterHists::ClusterHists()
   h_r   = new TH1F("r  " , ";r   ; Num Hits" , numbins_all,  rmin_all, rmax_all);
   h_z_r = new TH2F("z_r" , ";z_r ; r"        , numbins_all/5,  zmin_all, zmax_all, numbins_all/10, rmin_all, rmax_all);
   h_x_y = new TH2F("x_y" , ";x_y ; r"        , numbins_all, -rmax_all, rmax_all, numbins_all, -rmax_all, rmax_all);
+  h_z_r_hits = new TH2F("z_r_hits" , ";z_r ; r"        , numbins_all/5,  zmin_all, zmax_all, numbins_all/10, rmin_all, rmax_all);
+  h_x_y_hits = new TH2F("x_y_hits" , ";x_y ; r"        , numbins_all, -rmax_all, rmax_all, numbins_all, -rmax_all, rmax_all);
+  h_z_layer0   = new TH1F("hits_vs_z_layer0  " , ";z   ; Num Hits" , numbins_all,  zmin_all, zmax_all);
+  h_z_layer1   = new TH1F("hits_vs_z_layer1  " , ";z   ; Num Hits" , numbins_all,  zmin_all, zmax_all);
+  h_z_layer2   = new TH1F("hits_vs_z_layer2  " , ";z   ; Num Hits" , numbins_all,  zmin_all, zmax_all);
+  h_z_layer3   = new TH1F("hits_vs_z_layer3  " , ";z   ; Num Hits" , numbins_all,  zmin_all, zmax_all);
+  h_z_layer4   = new TH1F("hits_vs_z_layer4  " , ";z   ; Num Hits" , numbins_all,  zmin_all, zmax_all);
+  h_z_layer5   = new TH1F("hits_vs_z_layer5  " , ";z   ; Num Hits" , numbins_all,  zmin_all, zmax_all);
+  h_z_layer6   = new TH1F("hits_vs_z_layer6  " , ";z   ; Num Hits" , numbins_all,  zmin_all, zmax_all);
+  h_z_layer7   = new TH1F("hits_vs_z_layer7  " , ";z   ; Num Hits" , numbins_all,  zmin_all, zmax_all);
+  h_z_layer8   = new TH1F("hits_vs_z_layer8  " , ";z   ; Num Hits" , numbins_all,  zmin_all, zmax_all);
+  h_r_layer0   = new TH1F("hits_vs_r_layer0  " , ";r   ; Num Hits" , numbins_all,  rmin_all, rmax_all);
+  h_r_layer1   = new TH1F("hits_vs_r_layer1  " , ";r   ; Num Hits" , numbins_all,  rmin_all, rmax_all);
+  h_r_layer2   = new TH1F("hits_vs_r_layer2  " , ";r   ; Num Hits" , numbins_all,  rmin_all, rmax_all);
+  h_r_layer3   = new TH1F("hits_vs_r_layer3  " , ";r   ; Num Hits" , numbins_all,  rmin_all, rmax_all);
+  h_r_layer4   = new TH1F("hits_vs_r_layer4  " , ";r   ; Num Hits" , numbins_all,  rmin_all, rmax_all);
+  h_r_layer5   = new TH1F("hits_vs_r_layer5  " , ";r   ; Num Hits" , numbins_all,  rmin_all, rmax_all);
+  h_r_layer6   = new TH1F("hits_vs_r_layer6  " , ";r   ; Num Hits" , numbins_all,  rmin_all, rmax_all);
+  h_r_layer7   = new TH1F("hits_vs_r_layer7  " , ";r   ; Num Hits" , numbins_all,  rmin_all, rmax_all);
+  h_r_layer8   = new TH1F("hits_vs_r_layer8  " , ";r   ; Num Hits" , numbins_all,  rmin_all, rmax_all);
+
 
   // histograms with ranges that will just show vertex tracker hits
   int numbins_vx = 500;
@@ -60,14 +83,14 @@ void ClusterHists::fill(const EVENT::TrackerHit* trkhit)
 {
   //Calculate energy deposited
   float EDep = trkhit->getEDep();
-
+  
   //Calculating theta
   float x = trkhit->getPosition()[0];
   float y = trkhit->getPosition()[1];
   float z = trkhit->getPosition()[2];
   float r = sqrt(pow(x,2)+pow(y,2));
   float incidentTheta = std::atan(r/z);
-
+  
   if(incidentTheta<0)
     incidentTheta += M_PI;
   streamlog_out(DEBUG6) << "Theta: " << incidentTheta << std::endl;
@@ -85,10 +108,12 @@ void ClusterHists::fill(const EVENT::TrackerHit* trkhit)
 
   for (size_t j=0; j<loopsize; ++j) {
     lcio::SimTrackerHit *hitConstituent = dynamic_cast<lcio::SimTrackerHit*>( rawHits[j] );
+    h_hit_edep->Fill(hitConstituent->getEDep());
     const double *localPos = hitConstituent->getPosition();
     float x_local = localPos[0];
     float y_local = localPos[1];
     streamlog_out(DEBUG6) << "Local y: " << y_local << ", local x: " << x_local << std::endl;
+
     if (y_local < ymin){
       ymin = y_local;
       }
@@ -103,8 +128,8 @@ void ClusterHists::fill(const EVENT::TrackerHit* trkhit)
       xmax = x_local;
       //streamlog_out(DEBUG2) << "Updated ymin: " << ymin << ", xmin: " << xmin << std::endl;
       //streamlog_out(DEBUG2) << "Updated ymax: " << ymax << ", xmax: " << xmax << std::endl;          
-      }
-    }
+     }
+  }
   streamlog_out(DEBUG2) << "Min y pos: " << ymin  << ", max y pos: " << ymax << std::endl;
   streamlog_out(DEBUG2) << "Min x pos: " << xmin  << ", max x pos: " << xmax << std::endl;
   float cluster_size_y = (ymax - ymin)+1;
@@ -124,6 +149,7 @@ void ClusterHists::fill(const EVENT::TrackerHit* trkhit)
   UTIL::CellIDDecoder<lcio::TrackerHit> decoder(_encoderString);
   uint32_t systemID = decoder(trkhit)["system"];
   uint32_t layerID = decoder(trkhit)["layer"];
+  
   streamlog_out(DEBUG9) << "Layer ID is: " << layerID << std::endl;
 
   // Fill for all hits
@@ -134,7 +160,8 @@ void ClusterHists::fill(const EVENT::TrackerHit* trkhit)
 
   h_theta->Fill(incidentTheta);
   h_cluster_pos->Fill(z,r);
-  hits_by_layer->Fill(layerID);
+  h_clusters_by_layer->Fill(layerID);
+
   // tracker hit hists
   h_x->Fill(x);  
   h_y->Fill(y);  
@@ -142,6 +169,49 @@ void ClusterHists::fill(const EVENT::TrackerHit* trkhit)
   h_r->Fill(r);
   h_z_r->Fill(z,r);
   h_x_y->Fill(x,y);
+  for (size_t j=0; j<loopsize; ++j) {
+    h_hits_by_layer->Fill(layerID);
+    h_z_r_hits->Fill(z,r);
+    h_x_y_hits->Fill(x,y);
+    if(layerID==0){
+      h_z_layer0->Fill(z);
+      h_r_layer0->Fill(r);
+    }
+    if(layerID==1){
+      h_z_layer1->Fill(z);
+      h_r_layer1->Fill(r);
+    }
+    if(layerID==2){
+      h_z_layer2->Fill(z);
+      h_r_layer2->Fill(r);
+    }
+    if(layerID==3){
+      h_z_layer3->Fill(z);
+      h_r_layer3->Fill(r);
+    }
+    if(layerID==4){
+      h_z_layer4->Fill(z);
+      h_r_layer4->Fill(r);
+    }
+    if(layerID==5){
+      h_z_layer5->Fill(z);
+      h_r_layer5->Fill(r);
+    }
+    if(layerID==6){
+      h_z_layer6->Fill(z);
+      h_r_layer6->Fill(r);
+    }
+    if(layerID==7){
+      h_z_layer7->Fill(z);
+      h_r_layer7->Fill(r);
+    }
+    if(layerID==8){
+      h_z_layer8->Fill(z);
+      h_r_layer8->Fill(r);
+    }
+  }
+  
+
   // vertex hists
   h_x_vx->Fill(x);  
   h_y_vx->Fill(y);  
@@ -150,7 +220,7 @@ void ClusterHists::fill(const EVENT::TrackerHit* trkhit)
   h_z_r_vx->Fill(z,r);
   h_x_y_vx->Fill(x,y);
 
-  h_edep->Fill(EDep);
+  h_cluster_edep->Fill(EDep);
   h_edep_r->Fill(r,EDep);
   h_edep_cluster->Fill(EDep,cluster_size_tot);
 

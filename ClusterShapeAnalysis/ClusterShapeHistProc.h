@@ -4,6 +4,11 @@
 
 #include <TH1.h>
 
+namespace EVENT
+{
+  class TrackerHit;
+}
+
 class ClusterHists;
 class TrackerHitResoHists;
 
@@ -34,7 +39,9 @@ public:
 
   /** Called after data processing for clean up.
    */
-  virtual void end() ;  
+  virtual void end() ;
+
+  void LayerInfo(const EVENT::TrackerHit* trkhit, int offset);
 
 private:
   //! Tracker hit collections
@@ -70,6 +77,11 @@ private:
   std::shared_ptr<TrackerHitResoHists> _resolution_ob;
   std::shared_ptr<TrackerHitResoHists> _resolution_oe;
 
-  TH1 * h_trackerhit_timing;  
- 
+  TH1* h_trackerhit_timing;  
+  TH1* h_clusters_by_layer;
+  TH1* h_hits_by_layer;
+  TH1* h_clusters_by_layer_BX;
+  TH1* h_hits_by_layer_BX;
+
+  int nEvtTotal;
 };
