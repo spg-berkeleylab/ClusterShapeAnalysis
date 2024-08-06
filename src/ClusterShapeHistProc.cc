@@ -167,10 +167,18 @@ void ClusterShapeHistProc::init()
 
   tree->cd("../");
   h_trackerhit_timing = new TH1F("hit_timing", "Time of arrival of hits [ns]", 110, -10, 100);
-  h_clusters_by_layer   = new TH1F("numClusters_by_layer"      , ";Layer Index; Number of Clusters",15,0,15);
-  h_hits_by_layer   = new TH1F("numhits_by_layer"      , ";Layer Index; Number of Hits",15,0,15);
-  h_clusters_by_layer_BX   = new TH1F("numClusters_by_layer_BX"      , ";Layer Index; Number of Clusters / 1 BX",15,0,15);
-  h_hits_by_layer_BX   = new TH1F("numhits_by_layer_BX"      , ";Layer Index; Number of Hits / 1 BX",15,0,15);
+  h_clusters_by_bLayer   = new TH1F("numClusters_by_bLayer"      , ";Barrel Layer Index; Number of Clusters",15,0,15);
+  h_hits_by_bLayer   = new TH1F("numhits_by_bLayer"      , ";Barrel Layer Index; Number of Hits",15,0,15);
+  h_clusters_by_bLayer_BX   = new TH1F("numClusters_by_bLayer_BX"      , ";Barrel Layer Index; Number of Clusters / 1 BX",15,0,15);
+  h_hits_by_bLayer_BX   = new TH1F("numhits_by_bLayer_BX"      , ";Barrel Layer Index; Number of Hits / 1 BX",15,0,15);
+  h_clusters_by_eLayer   = new TH1F("numClusters_by_eLayer"      , ";Endcap Layer Index; Number of Clusters",20,0,20);
+  h_hits_by_eLayer   = new TH1F("numhits_by_eLayer"      , ";Endcap Layer Index; Number of Hits",20,0,20);
+  h_clusters_by_eLayer_BX   = new TH1F("numClusters_by_eLayer_BX"      , ";Endcap Layer Index; Number of Clusters / 1 BX",20,0,20);
+  h_hits_by_eLayer_BX   = new TH1F("numhits_by_eLayer_BX"      , ";Endcap Layer Index; Number of Hits / 1 BX",20,0,20);
+  h_clusterDensity_bLayer = new TH1F("ClusterDensity_bLayer", ";Barrel Layer Index; Number of Clusters / 1 BX / cm^2",15,0,15);
+  h_clusterDensity_eLayer = new TH1F("ClusterDensity_eLayer", ";Endcap Layer Index; Number of Clusters / 1 BX / cm^2",20,0,20);
+  h_hitDensity_bLayer = new TH1F("HitDensity_bLayer", ";Barrel Layer Index; Number of Hits / 1 BX / cm^2",15,0,15);
+  h_hitDensity_eLayer = new TH1F("HitDensity_eLayer", ";Endcap Layer Index; Number of Hits / 1 BX / cm^2",20,0,20);
   nEvtTotal = 0;
 }
 
@@ -271,7 +279,7 @@ void ClusterShapeHistProc::processEvent( LCEvent * evt )
       h_trackerhit_timing -> Fill(trkhit->getTime());
       streamlog_out(DEBUG9) << "Filling VB clusters with VB track hits..." << std::endl;
       _clusters_vb->fill(trkhit);
-      LayerInfo(trkhit, 0);
+      LayerInfo(trkhit, 0); //VXB Layers:0-7
     }
 
 
@@ -285,7 +293,7 @@ void ClusterShapeHistProc::processEvent( LCEvent * evt )
       h_trackerhit_timing -> Fill(trkhit->getTime());
       streamlog_out(DEBUG9) << "Filling VE clusters with VE track hits..." << std::endl;
       _clusters_ve->fill(trkhit);
-      LayerInfo(trkhit, 0);
+      LayerInfo(trkhit, 0); //VXE Layers:0-7
     }
 
   // inner tracker barrel
@@ -297,7 +305,7 @@ void ClusterShapeHistProc::processEvent( LCEvent * evt )
       h_trackerhit_timing -> Fill(trkhit->getTime());
       streamlog_out(DEBUG9) << "Filling IB clusters with IB track hits..." << std::endl;
       _clusters_ib->fill(trkhit);
-      LayerInfo(trkhit, 8);
+      LayerInfo(trkhit, 8); //VXB Layers:0-7, ITB Layers: 8-10
     }
 
   // inner tracker endcap
@@ -309,7 +317,7 @@ void ClusterShapeHistProc::processEvent( LCEvent * evt )
       h_trackerhit_timing -> Fill(trkhit->getTime());
       streamlog_out(DEBUG9) << "Filling IE clusters with IE track hits..." << std::endl;
       _clusters_ie->fill(trkhit);
-      //      LayerInfo(trkhit, 8);
+      LayerInfo(trkhit, 8); //VXE Layers: 0-7, ITE Layers: 8-14
     }
   
   // outer tracker barrel
@@ -321,7 +329,7 @@ void ClusterShapeHistProc::processEvent( LCEvent * evt )
       h_trackerhit_timing -> Fill(trkhit->getTime());
       streamlog_out(DEBUG9) << "Filling OB clusters with OB track hits..." << std::endl;
       _clusters_ob->fill(trkhit);
-      LayerInfo(trkhit, 8);
+      LayerInfo(trkhit, 11); //VXB Layers: 0-7, ITB Layers: 8-10, OTB Layers: 11-13
     }      
 
   // outer tracker endcap  
@@ -333,7 +341,7 @@ void ClusterShapeHistProc::processEvent( LCEvent * evt )
       h_trackerhit_timing -> Fill(trkhit->getTime());
       streamlog_out(DEBUG9) << "Filling OE clusters with OE track hits..." << std::endl;
       _clusters_oe->fill(trkhit);
-      //      LayerInfo(trkhit, 8);
+      LayerInfo(trkhit, 15); //VXE Layers: 0-7, ITE Layers: 8-14, OTE Layers: 15-18
     }
 
    
@@ -469,15 +477,27 @@ void ClusterShapeHistProc::LayerInfo(const EVENT::TrackerHit* trkhit, int offset
   const lcio::LCObjectVec &rawHits = trkhit->getRawHits();
   float loopsize = rawHits.size();
 
-  //Get hit layer                                                                                                                                                                                    
+  //Get hit layer                                                                                                                                                                           
   std::string _encoderString = lcio::LCTrackerCellID::encoding_string();
   UTIL::CellIDDecoder<lcio::TrackerHit> decoder(_encoderString);
+  uint32_t systemID = decoder(trkhit)["system"];
   uint32_t layerID = decoder(trkhit)["layer"];
-  h_clusters_by_layer->Fill(layerID+offset);
-  h_clusters_by_layer_BX->Fill(layerID+offset);
-  for (size_t j=0; j<loopsize; ++j) {
-    h_hits_by_layer->Fill(layerID+offset);
-    h_hits_by_layer_BX->Fill(layerID+offset);
+
+  if(systemID%2==0){ //Endcap layers
+    h_clusters_by_eLayer->Fill(layerID+offset);
+    h_clusters_by_eLayer_BX->Fill(layerID+offset);
+    h_hits_by_eLayer->Fill(layerID+offset, std::min((int)loopsize,30));
+    h_hits_by_eLayer_BX->Fill(layerID+offset, std::min((int)loopsize, 30));
+    h_clusterDensity_eLayer->Fill(layerID+offset);
+    h_hitDensity_eLayer->Fill(layerID+offset, std::min((int)loopsize, 30));
+  }
+  else{ //barrel layers
+    h_clusters_by_bLayer->Fill(layerID+offset);
+    h_clusters_by_bLayer_BX->Fill(layerID+offset);
+    h_hits_by_bLayer->Fill(layerID+offset, std::min((int)loopsize,30));
+    h_hits_by_bLayer_BX->Fill(layerID+offset, std::min((int)loopsize, 30));
+    h_clusterDensity_bLayer->Fill(layerID+offset);
+    h_hitDensity_bLayer->Fill(layerID+offset, std::min((int)loopsize, 30));
   }
 
   return;
@@ -488,6 +508,47 @@ void ClusterShapeHistProc::check( LCEvent * /*evt*/ )
 void ClusterShapeHistProc::end()
 {
   std::cout<<"Total events = "<<nEvtTotal<<std::endl;
-  h_clusters_by_layer_BX->Scale(1.0/nEvtTotal);
-  h_hits_by_layer_BX->Scale(1.0/nEvtTotal);
+  h_clusters_by_bLayer_BX->Scale(1.0/nEvtTotal);
+  h_hits_by_bLayer_BX->Scale(1.0/nEvtTotal);
+  h_clusters_by_eLayer_BX->Scale(1.0/nEvtTotal);
+  h_hits_by_eLayer_BX->Scale(1.0/nEvtTotal);
+  h_clusterDensity_bLayer->Scale(1.0/nEvtTotal);
+  h_clusterDensity_eLayer->Scale(1.0/nEvtTotal);
+  h_hitDensity_bLayer->Scale(1.0/nEvtTotal);
+  h_hitDensity_eLayer->Scale(1.0/nEvtTotal);
+
+  //barrel density
+  for(int ibin=1; ibin<=15; ibin++){
+    if(ibin<9){
+      h_clusterDensity_bLayer->SetBinContent(ibin, h_clusterDensity_bLayer->GetBinContent(ibin)/vxb_area[ibin-1]);
+      h_hitDensity_bLayer->SetBinContent(ibin, h_hitDensity_bLayer->GetBinContent(ibin)/vxb_area[ibin-1]);
+    }
+    else if(ibin<12){
+      h_clusterDensity_bLayer->SetBinContent(ibin, h_clusterDensity_bLayer->GetBinContent(ibin)/itb_area[ibin-9]);
+      h_hitDensity_bLayer->SetBinContent(ibin, h_hitDensity_bLayer->GetBinContent(ibin)/itb_area[ibin-9]);
+    }
+    else if(ibin<15){
+      h_clusterDensity_bLayer->SetBinContent(ibin, h_clusterDensity_bLayer->GetBinContent(ibin)/otb_area[ibin-12]);
+      h_hitDensity_bLayer->SetBinContent(ibin, h_hitDensity_bLayer->GetBinContent(ibin)/otb_area[ibin-12]);
+    }
+    else{}
+  }
+
+  //endcap density
+  for(int ibin=1; ibin<=20; ibin++){
+    if(ibin<9){
+      h_clusterDensity_eLayer->SetBinContent(ibin, h_clusterDensity_eLayer->GetBinContent(ibin)/vxe_area[ibin-1]);
+      h_hitDensity_eLayer->SetBinContent(ibin, h_hitDensity_eLayer->GetBinContent(ibin)/vxe_area[ibin-1]);
+    }
+    else if(ibin<16){
+      h_clusterDensity_eLayer->SetBinContent(ibin, h_clusterDensity_eLayer->GetBinContent(ibin)/ite_area[ibin-9]);
+      h_hitDensity_eLayer->SetBinContent(ibin, h_hitDensity_eLayer->GetBinContent(ibin)/ite_area[ibin-9]);
+    }
+    else if(ibin<20){
+      h_clusterDensity_eLayer->SetBinContent(ibin, h_clusterDensity_eLayer->GetBinContent(ibin)/ote_area[ibin-16]);
+      h_hitDensity_eLayer->SetBinContent(ibin, h_hitDensity_eLayer->GetBinContent(ibin)/ote_area[ibin-16]);
+    }
+    else{}
+  }
+    
 }

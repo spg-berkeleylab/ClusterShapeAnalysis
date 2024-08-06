@@ -42,7 +42,7 @@ public:
   virtual void end() ;
 
   void LayerInfo(const EVENT::TrackerHit* trkhit, int offset);
-
+  
 private:
   //! Tracker hit collections
   std::string _vbtrkhitColName {};
@@ -78,10 +78,25 @@ private:
   std::shared_ptr<TrackerHitResoHists> _resolution_oe;
 
   TH1* h_trackerhit_timing;  
-  TH1* h_clusters_by_layer;
-  TH1* h_hits_by_layer;
-  TH1* h_clusters_by_layer_BX;
-  TH1* h_hits_by_layer_BX;
+  TH1* h_clusters_by_bLayer;
+  TH1* h_hits_by_bLayer;
+  TH1* h_clusters_by_bLayer_BX;
+  TH1* h_hits_by_bLayer_BX;
+  TH1* h_clusters_by_eLayer;
+  TH1* h_hits_by_eLayer;
+  TH1* h_clusters_by_eLayer_BX;
+  TH1* h_hits_by_eLayer_BX;
+  TH1* h_clusterDensity_bLayer;
+  TH1* h_clusterDensity_eLayer;
+  TH1* h_hitDensity_bLayer;
+  TH1* h_hitDensity_eLayer;
 
   int nEvtTotal;
+  double vxb_area[8] = {270.4, 270.4, 448.5, 448.5, 655.2, 655.2, 904.8, 904.8};
+  double vxe_area[8] = {389.0, 389.0, 378.96, 378.96, 364.36, 364.36, 312.48, 312.48};
+  double itb_area[3] = {8117.85, 22034.16, 51678.81};
+  double ite_area[7] = {6639.65, 10611.59, 10078.04, 9900.19, 9307.37, 8595.98, 8299.56};
+  double otb_area[3] = {140032.91, 194828.39, 249623.88};
+  double ote_area[4] = {69545.45, 69545.45, 69545.45, 69545.45};
+
 };
