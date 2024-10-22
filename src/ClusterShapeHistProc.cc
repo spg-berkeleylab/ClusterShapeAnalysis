@@ -281,7 +281,7 @@ void ClusterShapeHistProc::processEvent( LCEvent * evt )
       _clusters_vb->fill(trkhit);
       LayerInfo(trkhit, 0); //VXB Layers:0-7
     }
-
+  _clusters_vb->h_cluster_edep_BX->Scale(1/_clusters_vb->h_cluster_edep_BX->Integral());
 
   // vertex endcap tracker hits
   streamlog_out(DEBUG3) << "Num Events in VE Hit Collection: " << vetrkhitCol->getNumberOfElements() << std::endl;

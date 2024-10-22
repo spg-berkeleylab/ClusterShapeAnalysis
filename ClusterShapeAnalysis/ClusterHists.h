@@ -23,10 +23,20 @@ public:
   // Fill histograms with a single track hit
   void fill(const EVENT::TrackerHit* trkhit);
 
+  TH1* h_cluster_edep_BX;
+
 private:
   TH2* h_size_theta_y;
   TH2* h_size_theta_x;
   TH2* h_size_theta_tot;
+  TH2* h_size_theta_tot_0;
+  TH2* h_size_theta_tot_1;
+  TH2* h_size_theta_tot_2;
+  TH2* h_size_theta_tot_3;
+  TH2* h_size_theta_tot_4;
+  TH2* h_size_theta_tot_5;
+  TH2* h_size_theta_tot_6;
+  TH2* h_size_theta_tot_7;
   TH2* h_size_r_tot;
   TH2* h_size_r_tot_0;
   TH2* h_size_r_tot_1;
@@ -63,7 +73,6 @@ private:
   TH1* h_z_layer5;
   TH1* h_z_layer6;
   TH1* h_z_layer7;
-  TH1* h_z_layer8;
   TH1* h_r_layer0;
   TH1* h_r_layer1;
   TH1* h_r_layer2;
@@ -72,8 +81,8 @@ private:
   TH1* h_r_layer5;
   TH1* h_r_layer6;
   TH1* h_r_layer7;
-  TH1* h_r_layer8;
-
+  TH1* h_avgHits;
+  
   // vertex
   TH1* h_x_vx;  
   TH1* h_y_vx;  
