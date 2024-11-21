@@ -179,6 +179,7 @@ void ClusterShapeHistProc::init()
   h_clusterDensity_eLayer = new TH1F("ClusterDensity_eLayer", ";Endcap Layer Index; Number of Clusters / 1 BX / cm^2",20,0,20);
   h_hitDensity_bLayer = new TH1F("HitDensity_bLayer", ";Barrel Layer Index; Number of Hits / 1 BX / cm^2",15,0,15);
   h_hitDensity_eLayer = new TH1F("HitDensity_eLayer", ";Endcap Layer Index; Number of Hits / 1 BX / cm^2",20,0,20);
+  h_inPixPU     = new TH1F("Hits_inPixPU"          , ";#Hits in same pixel; Number of pixels" ,50,0,50);
   nEvtTotal = 0;
 }
 
@@ -272,6 +273,7 @@ void ClusterShapeHistProc::processEvent( LCEvent * evt )
   // vertex barrel tracker hits
   streamlog_out(DEBUG3) << "Num Events in VB Hit Collection: " << vbtrkhitCol->getNumberOfElements() << std::endl;
   int maxTrkHits=0;
+  allPixels.clear();
   if (vbtrkhitCol) maxTrkHits = vbtrkhitCol->getNumberOfElements();
   for (int i=0; i<maxTrkHits; ++i)
     {
@@ -281,6 +283,11 @@ void ClusterShapeHistProc::processEvent( LCEvent * evt )
       _clusters_vb->fill(trkhit);
       LayerInfo(trkhit, 0); //VXB Layers:0-7
     }
+  for (const auto& pair : allPixels) {
+    uint64_t key = pair.first;
+    const std::vector<lcio::SimTrackerHit*>& vec = pair.second;
+    h_inPixPU->Fill(vec.size());
+  }
   _clusters_vb->h_cluster_edep_BX->Scale(1/_clusters_vb->h_cluster_edep_BX->Integral());
 
   // vertex endcap tracker hits
@@ -346,7 +353,6 @@ void ClusterShapeHistProc::processEvent( LCEvent * evt )
 
    
   // --- tracker hit resolution histograms
-
   // vertex barrel resolution
   maxTrkHits=0;
   if (VBRelationCollection) maxTrkHits = VBRelationCollection->getNumberOfElements();
@@ -469,15 +475,15 @@ void ClusterShapeHistProc::processEvent( LCEvent * evt )
       }
       _resolution_oe->fill(trkhit,simtrkhit,trkhitplane);
     }
-
 }
 
 void ClusterShapeHistProc::LayerInfo(const EVENT::TrackerHit* trkhit, int offset)
 {
   const lcio::LCObjectVec &rawHits = trkhit->getRawHits();
+  float z = trkhit->getPosition()[2];
   float loopsize = rawHits.size();
 
-  //Get hit layer                                                                                                                                                                           
+  //Get hit layer
   std::string _encoderString = lcio::LCTrackerCellID::encoding_string();
   UTIL::CellIDDecoder<lcio::TrackerHit> decoder(_encoderString);
   uint32_t systemID = decoder(trkhit)["system"];
@@ -499,6 +505,50 @@ void ClusterShapeHistProc::LayerInfo(const EVENT::TrackerHit* trkhit, int offset
     h_clusterDensity_bLayer->Fill(layerID+offset);
     h_hitDensity_bLayer->Fill(layerID+offset, std::min((int)loopsize, 30));
   }
+
+  if(layerID==0 && systemID==1){ //only first layer of vertex barrel
+    for (size_t j=0; j<loopsize; ++j) {
+      lcio::SimTrackerHit *hitConstituent = dynamic_cast<lcio::SimTrackerHit*>( rawHits[j] );
+      const double *localPos = hitConstituent->getPosition();
+      int16_t x_local = localPos[0]>0. ? static_cast<int16_t>(localPos[0]) : static_cast<int16_t>(localPos[0]+10000);
+      int16_t y_local = localPos[1]>0. ? static_cast<int16_t>(localPos[1]) : static_cast<int16_t>(localPos[1]+10000);
+      UTIL::CellIDDecoder<lcio::SimTrackerHit> simdecoder(_encoderString);
+      int16_t ladderID = simdecoder(hitConstituent)["module"];
+      int16_t modID = 0;
+      if(z>=-130. && z<-104.)
+	modID = 0;
+      else if(z>=-104. && z<-78.)
+	modID = 1;
+      else if(z>=-78. && z<-52.)
+	modID = 2;
+      else if(z>=-52. && z<-26.)
+	modID = 3;
+      else if(z>=-26. && z<0)
+	modID = 4;
+      else if(z>=0. && z<26.)
+	modID = 5;
+      else if(z>=26. && z<52.)
+	modID = 6;
+      else if(z>=52. && z<78.)
+	modID = 7;
+      else if(z>=78. && z<104.)
+	modID = 8;
+      else
+	modID = 9;
+
+      uint64_t pixel_hash=0;
+      pixel_hash |= ((uint64_t)x_local)<<48;
+      pixel_hash |= ((uint64_t)y_local)<<32;
+      pixel_hash |= ((uint64_t)modID)<<16;
+      pixel_hash |= (uint64_t)ladderID;
+
+      if(allPixels.find(pixel_hash) == allPixels.end())
+	allPixels[pixel_hash] = {};
+
+      allPixels[pixel_hash].push_back(hitConstituent);
+    }
+  }
+
 
   return;
 }
