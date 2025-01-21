@@ -11,6 +11,10 @@
 #include <TCanvas.h>
 #include <TPaletteAxis.h>
 
+#include "DD4hep/Detector.h"
+#include "DD4hep/DD4hepUnits.h"
+#include "/home/julietwright/work/TrkHitsStudiesWorkspace/packages/MarlinTrkProcessors/source/Utils/include/FilterTimeHits.h"
+
 
 ClusterHists::ClusterHists()
 {
@@ -128,8 +132,8 @@ ClusterHists::ClusterHists()
   h_thclen_layer8 = new TH1F("thclen_layer8", ";Number of Hit Constituents; Events", 50, 0, 1000);
 
 //3D HISTO for X vs Y vs Z position in digitized and truth 
-//h_3DPosition_digi = new TH3F("3DPosition_digi", "3D Digitized Position;x[mm];y[mm];z[mm]", 100, 0, 1600, 100, 0, 1600, 100,  -2500, 2500);
-//h_3DPosition_cdigi = new TH3D ("3DPosition_cdigi", "3D Digitized Position;#theta;r[mm];z[mm]", numbins_all/10, 0, 3.14, numbins_all/10, -rmax_all, rmax_all, numbins_all/10,  zmin_all, zmax_all);
+h_3DPosition_digi = new TH3F("3DPosition_digi", "3D Digitized Position;x[mm];y[mm];z[mm]", 100, 0, 1600, 100, 0, 1600, 100,  -2500, 2500);
+h_3DPosition_cdigi = new TH3D ("3DPosition_cdigi", "3D Digitized Position;#theta;r[mm];z[mm]", numbins_all/10, 0, 3.14, numbins_all/10, -rmax_all, rmax_all, numbins_all/10,  zmin_all, zmax_all);
  
 }
 
@@ -138,7 +142,17 @@ void ClusterHists::fill(const EVENT::TrackerHit* trkhit)
   //Calculate energy deposited
   float EDep = trkhit->getEDep();
   float toa = trkhit->getTime(); //time of arrival -- Juliet
+  // Correcting for the propagation time
+  dd4hep::rec::Vector3D pos = trkhit->getPosition();
+  double hitR = pos.r();
+  double m_beta = 1.0;
+  double m_time_min = -90.0; //ns
+  double m_time_max = 90.0; //ns
+  double dt = hitR / (TMath::C() * m_beta / 1e6);
+  toa -= dt;
   
+  
+
   //Calculating theta
   float x = trkhit->getPosition()[0];
   float y = trkhit->getPosition()[1];
@@ -229,22 +243,31 @@ void ClusterHists::fill(const EVENT::TrackerHit* trkhit)
   for (size_t j=0; j<loopsize; ++j) {
     lcio::SimTrackerHit *hitConstituent = dynamic_cast<lcio::SimTrackerHit*>( rawHits[j] ); // adding this -- Juliet
     //lcio::TrackerHit *hitTracker = dynamic_cast<lcio::TrackerHit*>( rawHits[j] );
+    
+    //skip events out of the time range -> Correcting for the propagation time
+    if (toa < m_time_min || toa > m_time_max){
+      continue;
+    }
+      
     h_hits_by_layer->Fill(layerID);
     h_z_r_hits->Fill(z,r);
     h_x_y_hits->Fill(x,y);
     
     
-    //h_3DPosition_digi->Fill(x, y, z);
-    //h_3DPosition_cdigi->Fill(theta_min, r, z);
+    h_3DPosition_digi->Fill(x, y, z);
+    h_3DPosition_cdigi->Fill(theta_min, r, z);
 
     if(layerID==0){
       h_z_layer0->Fill(z);
       h_r_layer0->Fill(r);
       //setting cluster and time of arrive with if j == 0 becuase we do not want fill the cluster edep and toa for clusters multiple times
-      if(j == 0) h_cluster_edep_layer0->Fill(EDep); //energy cluster hits in GeV in layer 1 -- Juliet
-      if (j == 0) h_trackerhit_time_layer0->Fill(toa); //time of arrive in layer 1 -- Juliet
+      if(j==0){
+        h_cluster_edep_layer0->Fill(EDep);
+        h_trackerhit_time_layer0->Fill(toa);
+        h_thclen_layer0->Fill(rawHits.size());
+      }
       h_hit_edep_layer0->Fill(hitConstituent->getEDep()); //energy in electrons -- Juliet
-      h_thclen_layer0->Fill(rawHits.size());
+      
 
       //std::cout << "tracker hit time: " << toa << ", and edep cluster: "<< EDep <<", and edep hit : " << hitConstituent->getEDep() << ", with hit num: " << rawHits.size() << std::endl;
 
@@ -252,66 +275,83 @@ void ClusterHists::fill(const EVENT::TrackerHit* trkhit)
     if(layerID==1){
       h_z_layer1->Fill(z);
       h_r_layer1->Fill(r);
-      if(j == 0) h_cluster_edep_layer1->Fill(EDep); //energy cluster hits in GeV in layer 2 -- Juliet
-      if(j == 0) h_trackerhit_time_layer1->Fill(toa); //time of arrive in layer 2 -- Juliet
+      if(j == 0){
+        h_cluster_edep_layer1->Fill(EDep);
+        h_trackerhit_time_layer1->Fill(toa); //time of arrive in layer 2 -- Juliet
+        h_thclen_layer1->Fill(rawHits.size());
+      }   
       h_hit_edep_layer1->Fill(hitConstituent->getEDep()); //energy in electrons -- Juliet
-      h_thclen_layer1->Fill(rawHits.size());
     }
     if(layerID==2){
       h_z_layer2->Fill(z);
       h_r_layer2->Fill(r);
-      if(j == 0) h_cluster_edep_layer2->Fill(EDep); //energy cluster hits in GeV in layer 3 -- Juliet
-      if(j == 0) h_trackerhit_time_layer2->Fill(toa); //time of arrive in layer 3 -- Juliet
+      if(j==0){
+        h_cluster_edep_layer2->Fill(EDep);
+        h_trackerhit_time_layer2->Fill(toa);
+        h_thclen_layer2->Fill(rawHits.size());
+      }
       h_hit_edep_layer2->Fill(hitConstituent->getEDep()); //energy in electrons -- Juliet
-      h_thclen_layer2->Fill(rawHits.size());
+     
     }
     if(layerID==3){
       h_z_layer3->Fill(z);
       h_r_layer3->Fill(r);
-      if(j == 0) h_cluster_edep_layer3->Fill(EDep); //energy cluster hits in GeV in layer 4 -- Juliet
-      if(j == 0) h_trackerhit_time_layer3->Fill(toa); //time of arrive in layer 4 -- Juliet
+      if(j==0){
+        h_cluster_edep_layer3->Fill(EDep);
+        h_trackerhit_time_layer3->Fill(toa);
+        h_thclen_layer3->Fill(rawHits.size());
+      }
       h_hit_edep_layer3->Fill(hitConstituent->getEDep()); //energy in electrons -- Juliet
-      h_thclen_layer3->Fill(rawHits.size());
     }
     if(layerID==4){
       h_z_layer4->Fill(z);
       h_r_layer4->Fill(r);
-      if(j == 0) h_cluster_edep_layer4->Fill(EDep); //energy cluster hits in GeV in layer 5 -- Juliet
-      if(j == 0) h_trackerhit_time_layer4->Fill(toa); //time of arrive in layer 5 -- Juliet
+      if(j==0){
+        h_cluster_edep_layer4->Fill(EDep);
+        h_trackerhit_time_layer4->Fill(toa);
+        h_thclen_layer4->Fill(rawHits.size());
+      }
       h_hit_edep_layer4->Fill(hitConstituent->getEDep()); //energy in electrons -- Juliet
-      h_thclen_layer4->Fill(rawHits.size());
     }
     if(layerID==5){
       h_z_layer5->Fill(z);
       h_r_layer5->Fill(r);
-      if(j == 0) h_cluster_edep_layer5->Fill(EDep); //energy cluster hits in GeV in layer 6 -- Juliet
-      if(j == 0) h_trackerhit_time_layer5->Fill(toa); //time of arrive in layer 6 -- Juliet
+      if(j==0){
+        h_cluster_edep_layer5->Fill(EDep);
+        h_trackerhit_time_layer5->Fill(toa);
+        h_thclen_layer5->Fill(rawHits.size());
+      }
       h_hit_edep_layer5->Fill(hitConstituent->getEDep()); //energy in electrons -- Juliet
-      h_thclen_layer5->Fill(rawHits.size());
     }
     if(layerID==6){
       h_z_layer6->Fill(z);
       h_r_layer6->Fill(r);
-      if(j == 0) h_cluster_edep_layer6->Fill(EDep); //energy cluster hits in GeV in layer 7 -- Juliet
-      if(j == 0) h_trackerhit_time_layer6->Fill(toa); //time of arrive in layer 7 -- Juliet
+      if(j==0){
+        h_cluster_edep_layer6->Fill(EDep);
+        h_trackerhit_time_layer6->Fill(toa);
+        h_thclen_layer6->Fill(rawHits.size());
+      }
       h_hit_edep_layer6->Fill(hitConstituent->getEDep()); //energy in electrons -- Juliet
-      h_thclen_layer6->Fill(rawHits.size());
     }
     if(layerID==7){
       h_z_layer7->Fill(z);
       h_r_layer7->Fill(r);
-      if(j == 0) h_cluster_edep_layer7->Fill(EDep); //energy cluster hits in GeV in layer 8 -- Juliet
-      if(j == 0) h_trackerhit_time_layer7->Fill(toa); //time of arrive in layer 8 -- Julie
+      if(j==0){
+        h_cluster_edep_layer7->Fill(EDep);
+        h_trackerhit_time_layer7->Fill(toa);
+        h_thclen_layer7->Fill(rawHits.size());
+      }
       h_hit_edep_layer7->Fill(hitConstituent->getEDep()); //energy in electrons -- Juliet
-      h_thclen_layer7->Fill(rawHits.size());
     }
     if(layerID==8){
       h_z_layer8->Fill(z);
       h_r_layer8->Fill(r);
-      if(j == 0) h_cluster_edep_layer8->Fill(EDep); //energy cluster hits in GeV in layer 8 -- Juliet
-      if(j == 0) h_trackerhit_time_layer8->Fill(toa); //time of arrive in layer 8 -- Julie
+      if(j==0){
+        h_cluster_edep_layer8->Fill(EDep);
+        h_trackerhit_time_layer8->Fill(toa);
+        h_thclen_layer8->Fill(rawHits.size());
+      }
       h_hit_edep_layer8->Fill(hitConstituent->getEDep()); //energy in electrons -- Juliet
-      h_thclen_layer8->Fill(rawHits.size());
     }
   }
   
