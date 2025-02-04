@@ -571,15 +571,21 @@ void ClusterShapeHistProc::end()
   for(int ibin=1; ibin<=15; ibin++){
     if(ibin<9){
       h_clusterDensity_bLayer->SetBinContent(ibin, h_clusterDensity_bLayer->GetBinContent(ibin)/vxb_area[ibin-1]);
+      h_clusterDensity_bLayer->SetBinError(ibin, h_clusterDensity_bLayer->GetBinError(ibin)/vxb_area[ibin-1]);
       h_hitDensity_bLayer->SetBinContent(ibin, h_hitDensity_bLayer->GetBinContent(ibin)/vxb_area[ibin-1]);
+      h_hitDensity_bLayer->SetBinError(ibin, h_hitDensity_bLayer->GetBinError(ibin)/vxb_area[ibin-1]);
     }
     else if(ibin<12){
       h_clusterDensity_bLayer->SetBinContent(ibin, h_clusterDensity_bLayer->GetBinContent(ibin)/itb_area[ibin-9]);
+      h_clusterDensity_bLayer->SetBinError(ibin, h_clusterDensity_bLayer->GetBinError(ibin)/itb_area[ibin-9]);
       h_hitDensity_bLayer->SetBinContent(ibin, h_hitDensity_bLayer->GetBinContent(ibin)/itb_area[ibin-9]);
+      h_hitDensity_bLayer->SetBinError(ibin, h_hitDensity_bLayer->GetBinError(ibin)/itb_area[ibin-9]);
     }
     else if(ibin<15){
       h_clusterDensity_bLayer->SetBinContent(ibin, h_clusterDensity_bLayer->GetBinContent(ibin)/otb_area[ibin-12]);
+      h_clusterDensity_bLayer->SetBinError(ibin, h_clusterDensity_bLayer->GetBinError(ibin)/otb_area[ibin-12]);
       h_hitDensity_bLayer->SetBinContent(ibin, h_hitDensity_bLayer->GetBinContent(ibin)/otb_area[ibin-12]);
+      h_hitDensity_bLayer->SetBinError(ibin, h_hitDensity_bLayer->GetBinError(ibin)/otb_area[ibin-12]);
     }
     else{}
   }
@@ -588,15 +594,21 @@ void ClusterShapeHistProc::end()
   for(int ibin=1; ibin<=20; ibin++){
     if(ibin<9){
       h_clusterDensity_eLayer->SetBinContent(ibin, h_clusterDensity_eLayer->GetBinContent(ibin)/vxe_area[ibin-1]);
+      h_clusterDensity_eLayer->SetBinError(ibin, h_clusterDensity_eLayer->GetBinError(ibin)/vxe_area[ibin-1]);
       h_hitDensity_eLayer->SetBinContent(ibin, h_hitDensity_eLayer->GetBinContent(ibin)/vxe_area[ibin-1]);
+      h_hitDensity_eLayer->SetBinError(ibin, h_hitDensity_eLayer->GetBinError(ibin)/vxe_area[ibin-1]);
     }
     else if(ibin<16){
       h_clusterDensity_eLayer->SetBinContent(ibin, h_clusterDensity_eLayer->GetBinContent(ibin)/ite_area[ibin-9]);
+      h_clusterDensity_eLayer->SetBinError(ibin, h_clusterDensity_eLayer->GetBinError(ibin)/ite_area[ibin-9]);
       h_hitDensity_eLayer->SetBinContent(ibin, h_hitDensity_eLayer->GetBinContent(ibin)/ite_area[ibin-9]);
+      h_hitDensity_eLayer->SetBinError(ibin, h_hitDensity_eLayer->GetBinError(ibin)/ite_area[ibin-9]);
     }
     else if(ibin<20){
       h_clusterDensity_eLayer->SetBinContent(ibin, h_clusterDensity_eLayer->GetBinContent(ibin)/ote_area[ibin-16]);
+      h_clusterDensity_eLayer->SetBinError(ibin, h_clusterDensity_eLayer->GetBinError(ibin)/ote_area[ibin-16]);
       h_hitDensity_eLayer->SetBinContent(ibin, h_hitDensity_eLayer->GetBinContent(ibin)/ote_area[ibin-16]);
+      h_hitDensity_eLayer->SetBinError(ibin, h_hitDensity_eLayer->GetBinError(ibin)/ote_area[ibin-16]);
     }
     else{}
   }
