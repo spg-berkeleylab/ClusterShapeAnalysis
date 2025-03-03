@@ -85,6 +85,28 @@ private:
   TH2* h_z_r_vx;
   TH2* h_x_y_vx;
 
+  //time and edep cut for all layers -- juliet
+  TH1* h_cluster_edep_Tcut;
+  TH1* h_cluster_edep_Tcut_layer0;
+  TH1* h_cluster_edep_Tcut_layer1;
+  TH1* h_cluster_edep_Tcut_layer2;   
+  TH1* h_cluster_edep_Tcut_layer3;
+  TH1* h_cluster_edep_Tcut_layer4;
+  TH1* h_cluster_edep_Tcut_layer5;
+  TH1* h_cluster_edep_Tcut_layer6;
+  TH1* h_cluster_edep_Tcut_layer7;
+  TH1* h_cluster_edep_Tcut_layer8;
+
+  TH1* h_trackerhit_time_Tcut;
+  TH1* h_trackerhit_time_Tcut_layer0;
+  TH1* h_trackerhit_time_Tcut_layer1;
+  TH1* h_trackerhit_time_Tcut_layer2;
+  TH1* h_trackerhit_time_Tcut_layer3;
+  TH1* h_trackerhit_time_Tcut_layer4;
+  TH1* h_trackerhit_time_Tcut_layer5;
+  TH1* h_trackerhit_time_Tcut_layer6;
+  TH1* h_trackerhit_time_Tcut_layer7;
+
   //time and edep for 1st layer -- juliet
   TH1* h_cluster_edep_layer0;
   TH1* h_cluster_edep_layer1;
@@ -107,6 +129,7 @@ private:
   TH1* h_hit_edep_layer7;
   TH1* h_hit_edep_layer8;
 //time of arriver per layer
+  TH1* h_trackerhit_time;
   TH1* h_trackerhit_time_layer0;
   TH1* h_trackerhit_time_layer1;
   TH1* h_trackerhit_time_layer2;

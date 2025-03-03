@@ -98,6 +98,27 @@ ClusterHists::ClusterHists()
   h_cluster_edep_layer7   = new TH1F("Clusters_edep_layer7", ";Energy Deposited (GeV);Clusters" ,200,0,0.0005);
   h_cluster_edep_layer8   = new TH1F("Clusters_edep_layer8", ";Energy Deposited (GeV);Clusters" ,200,0,0.0005);
 
+  //time-energy cluster cut: 
+  h_cluster_edep_Tcut     = new TH1F("Clusters_edep_Tcut", ";Energy Deposited (GeV);Clusters" ,100,0,0.0005);
+  h_cluster_edep_Tcut_layer0   = new TH1F("Clusters_edep_Tcut_layer0", ";Energy Deposited (GeV);Clusters" ,200,0,0.0005);
+  h_cluster_edep_Tcut_layer1   = new TH1F("Clusters_edep_Tcut_layer1", ";Energy Deposited (GeV);Clusters" ,200,0,0.0005);
+  h_cluster_edep_Tcut_layer2   = new TH1F("Clusters_edep_Tcut_layer2", ";Energy Deposited (GeV);Clusters" ,200,0,0.0005);
+  h_cluster_edep_Tcut_layer3   = new TH1F("Clusters_edep_Tcut_layer3", ";Energy Deposited (GeV);Clusters" ,200,0,0.0005);
+  h_cluster_edep_Tcut_layer4   = new TH1F("Clusters_edep_Tcut_layer4", ";Energy Deposited (GeV);Clusters" ,200,0,0.0005);
+  h_cluster_edep_Tcut_layer5   = new TH1F("Clusters_edep_Tcut_layer5", ";Energy Deposited (GeV);Clusters" ,200,0,0.0005);
+  h_cluster_edep_Tcut_layer6   = new TH1F("Clusters_edep_Tcut_layer6", ";Energy Deposited (GeV);Clusters" ,200,0,0.0005);
+  h_cluster_edep_Tcut_layer7   = new TH1F("Clusters_edep_Tcut_layer7", ";Energy Deposited (GeV);Clusters" ,200,0,0.0005);
+
+  h_trackerhit_time_Tcut  = new TH1F("trackerhit_time_Tcut", ";Time (ns);Events" ,800,-1,20);
+  h_trackerhit_time_Tcut_layer0  = new TH1F("trackerhit_time_Tcut_layer0", ";Time (ns);Events" ,800,-1,20);
+  h_trackerhit_time_Tcut_layer1  = new TH1F("trackerhit_time_Tcut_layer1", ";Time (ns);Events" ,800,-1,20);
+  h_trackerhit_time_Tcut_layer2  = new TH1F("trackerhit_time_Tcut_layer2", ";Time (ns);Events" ,800,-1,20);
+  h_trackerhit_time_Tcut_layer3  = new TH1F("trackerhit_time_Tcut_layer3", ";Time (ns);Events" ,800,-1,20);
+  h_trackerhit_time_Tcut_layer4  = new TH1F("trackerhit_time_Tcut_layer4", ";Time (ns);Events" ,800,-1,20);
+  h_trackerhit_time_Tcut_layer5  = new TH1F("trackerhit_time_Tcut_layer5", ";Time (ns);Events" ,800,-1,20);
+  h_trackerhit_time_Tcut_layer6  = new TH1F("trackerhit_time_Tcut_layer6", ";Time (ns);Events" ,800,-1,20);
+  h_trackerhit_time_Tcut_layer7  = new TH1F("trackerhit_time_Tcut_layer7", ";Time (ns);Events" ,800,-1,20); 
+
   h_hit_edep_layer0   = new TH1F("hit_edep_layer0", ";Deposited charge (electrons);Hits" ,5000, 0, 50000);
   h_hit_edep_layer1   = new TH1F("hit_edep_layer1", ";Deposited charge (electrons);Hits" ,5000, 0, 50000);
   h_hit_edep_layer2   = new TH1F("hit_edep_layer2", ";Deposited charge (electrons);Hits" ,5000, 0, 50000);
@@ -267,6 +288,10 @@ void ClusterHists::fill(const EVENT::TrackerHit* trkhit)
         h_cluster_edep_layer0->Fill(EDep);
         h_trackerhit_time_layer0->Fill(toa);
         h_thclen_layer0->Fill(rawHits.size());
+        if(toa < 0.2){
+          h_cluster_edep_Tcut_layer0->Fill(EDep);
+          h_trackerhit_time_Tcut_layer0->Fill(toa);
+        }
       }
       h_hit_edep_layer0->Fill(hitConstituent->getEDep()); //energy in electrons -- Juliet
       
@@ -281,6 +306,10 @@ void ClusterHists::fill(const EVENT::TrackerHit* trkhit)
         h_cluster_edep_layer1->Fill(EDep);
         h_trackerhit_time_layer1->Fill(toa); //time of arrive in layer 2 -- Juliet
         h_thclen_layer1->Fill(rawHits.size());
+        if(toa < 0.2){
+          h_cluster_edep_Tcut_layer1->Fill(EDep);
+          h_trackerhit_time_Tcut_layer1->Fill(toa);
+        }
       }   
       h_hit_edep_layer1->Fill(hitConstituent->getEDep()); //energy in electrons -- Juliet
     }
@@ -291,6 +320,10 @@ void ClusterHists::fill(const EVENT::TrackerHit* trkhit)
         h_cluster_edep_layer2->Fill(EDep);
         h_trackerhit_time_layer2->Fill(toa);
         h_thclen_layer2->Fill(rawHits.size());
+        if(toa < 0.2){
+          h_cluster_edep_Tcut_layer2->Fill(EDep);
+          h_trackerhit_time_Tcut_layer2->Fill(toa);
+        }
       }
       h_hit_edep_layer2->Fill(hitConstituent->getEDep()); //energy in electrons -- Juliet
      
@@ -302,6 +335,10 @@ void ClusterHists::fill(const EVENT::TrackerHit* trkhit)
         h_cluster_edep_layer3->Fill(EDep);
         h_trackerhit_time_layer3->Fill(toa);
         h_thclen_layer3->Fill(rawHits.size());
+        if(toa < 0.2){
+          h_cluster_edep_Tcut_layer3->Fill(EDep);
+          h_trackerhit_time_Tcut_layer3->Fill(toa);
+        }
       }
       h_hit_edep_layer3->Fill(hitConstituent->getEDep()); //energy in electrons -- Juliet
     }
@@ -312,6 +349,10 @@ void ClusterHists::fill(const EVENT::TrackerHit* trkhit)
         h_cluster_edep_layer4->Fill(EDep);
         h_trackerhit_time_layer4->Fill(toa);
         h_thclen_layer4->Fill(rawHits.size());
+        if(toa < 0.2){
+          h_cluster_edep_Tcut_layer4->Fill(EDep);
+          h_trackerhit_time_Tcut_layer4->Fill(toa);
+        }
       }
       h_hit_edep_layer4->Fill(hitConstituent->getEDep()); //energy in electrons -- Juliet
     }
@@ -322,6 +363,10 @@ void ClusterHists::fill(const EVENT::TrackerHit* trkhit)
         h_cluster_edep_layer5->Fill(EDep);
         h_trackerhit_time_layer5->Fill(toa);
         h_thclen_layer5->Fill(rawHits.size());
+        if(toa < 0.2){
+          h_cluster_edep_Tcut_layer5->Fill(EDep);
+          h_trackerhit_time_Tcut_layer5->Fill(toa);
+        }
       }
       h_hit_edep_layer5->Fill(hitConstituent->getEDep()); //energy in electrons -- Juliet
     }
@@ -332,6 +377,10 @@ void ClusterHists::fill(const EVENT::TrackerHit* trkhit)
         h_cluster_edep_layer6->Fill(EDep);
         h_trackerhit_time_layer6->Fill(toa);
         h_thclen_layer6->Fill(rawHits.size());
+        if(toa < 0.2){
+          h_cluster_edep_Tcut_layer6->Fill(EDep);
+          h_trackerhit_time_Tcut_layer6->Fill(toa);
+        }
       }
       h_hit_edep_layer6->Fill(hitConstituent->getEDep()); //energy in electrons -- Juliet
     }
@@ -342,6 +391,10 @@ void ClusterHists::fill(const EVENT::TrackerHit* trkhit)
         h_cluster_edep_layer7->Fill(EDep);
         h_trackerhit_time_layer7->Fill(toa);
         h_thclen_layer7->Fill(rawHits.size());
+        if(toa < 0.2){
+          h_cluster_edep_Tcut_layer7->Fill(EDep);
+          h_trackerhit_time_Tcut_layer7->Fill(toa);
+        }
       }
       h_hit_edep_layer7->Fill(hitConstituent->getEDep()); //energy in electrons -- Juliet
     }
@@ -367,6 +420,13 @@ void ClusterHists::fill(const EVENT::TrackerHit* trkhit)
   h_x_y_vx->Fill(x,y);
 
   h_cluster_edep->Fill(EDep);
+  //NEW 2/19/2025
+  if (toa > m_time_min && toa < m_time_max){
+    if(toa < 0.2e-3){
+      h_cluster_edep_Tcut->Fill(EDep);
+      h_trackerhit_time_Tcut->Fill(toa);
+    }
+  }
   h_edep_r->Fill(r,EDep);
   h_edep_cluster->Fill(EDep,cluster_size_tot);
 
