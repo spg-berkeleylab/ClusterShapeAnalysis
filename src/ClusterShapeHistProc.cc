@@ -510,10 +510,10 @@ void ClusterShapeHistProc::LayerInfo(const EVENT::TrackerHit* trkhit, int offset
   UTIL::CellIDDecoder<lcio::TrackerHit> decoder(_encoderString);
   uint32_t systemID = decoder(trkhit)["system"];
   uint32_t layerID = decoder(trkhit)["layer"];
-  int z_dir = z > 0 ? 1 : -1;
+  int z_dir = z > 0. ? 1 : -1;
 
   if(systemID%2==0){ //Endcap layers
-   h_clusters_by_eLayer->Fill(z_dir*(layerID+1) + z_dir*offset);
+    h_clusters_by_eLayer->Fill(z_dir*(layerID+1) + z_dir*offset);
     h_clusters_by_eLayer_BX->Fill(z_dir*(layerID+1) + z_dir*offset);
     h_hits_by_eLayer->Fill(z_dir*(layerID+1) + z_dir*offset, std::min((int)loopsize,30));
     h_hits_by_eLayer_BX->Fill(z_dir*(layerID+1) + z_dir*offset, std::min((int)loopsize, 30));
@@ -521,12 +521,12 @@ void ClusterShapeHistProc::LayerInfo(const EVENT::TrackerHit* trkhit, int offset
     h_hitDensity_eLayer->Fill(z_dir*(layerID+1) + z_dir*offset, std::min((int)loopsize, 30));
   }
   else{ //barrel layers
-    h_clusters_by_bLayer->Fill(z_dir*(layerID+1) + z_dir*offset);
-    h_clusters_by_bLayer_BX->Fill(z_dir*(layerID+1) + z_dir*offset);
-    h_hits_by_bLayer->Fill(z_dir*(layerID+1) + z_dir*offset, std::min((int)loopsize,30));
-    h_hits_by_bLayer_BX->Fill(z_dir*(layerID+1) + z_dir*offset, std::min((int)loopsize, 30));
-    h_clusterDensity_bLayer->Fill(z_dir*(layerID+1) + z_dir*offset);
-    h_hitDensity_bLayer->Fill(z_dir*(layerID+1) + z_dir*offset, std::min((int)loopsize, 30));
+    h_clusters_by_bLayer->Fill(layerID + offset);
+    h_clusters_by_bLayer_BX->Fill(layerID + offset);
+    h_hits_by_bLayer->Fill(layerID + offset, std::min((int)loopsize,30));
+    h_hits_by_bLayer_BX->Fill(layerID + offset, std::min((int)loopsize, 30));
+    h_clusterDensity_bLayer->Fill(layerID + offset);
+    h_hitDensity_bLayer->Fill(layerID + offset, std::min((int)loopsize, 30));
   }
 
   if(layerID==0 && systemID==1){ //only first layer of vertex barrel
@@ -595,24 +595,23 @@ void ClusterShapeHistProc::end()
 
   //barrel density
   for(int ibin=1; ibin<=h_clusters_by_bLayer_BX->GetNbinsX(); ibin++){
-    x_val = h_clusters_by_bLayer_BX->GetBinCenter(ibin);
-    z_dir = x_val > 0 ? 1 : -1;
+    x_val = h_clusters_by_bLayer_BX->GetBinLowEdge(ibin);
     if(x_val<10 && x_val>0 && h_clusters_by_bLayer_BX->GetBinContent(ibin)>0){
-      layerID = int(x_val/z_dir) - 1;
+      layerID = x_val;
       h_clusterDensity_bLayer->SetBinContent(ibin, h_clusterDensity_bLayer->GetBinContent(ibin)/vxb_area.at(layerID));
       h_clusterDensity_bLayer->SetBinError(ibin, h_clusterDensity_bLayer->GetBinError(ibin)/vxb_area.at(layerID));
       h_hitDensity_bLayer->SetBinContent(ibin, h_hitDensity_bLayer->GetBinContent(ibin)/vxb_area.at(layerID));
       h_hitDensity_bLayer->SetBinError(ibin, h_hitDensity_bLayer->GetBinError(ibin)/vxb_area.at(layerID));
     }
     else if(x_val<20 && x_val>10 && h_clusters_by_bLayer_BX->GetBinContent(ibin)>0){
-      layerID = int((x_val - z_dir*10)/z_dir) - 1;
+      layerID = x_val - 10;
       h_clusterDensity_bLayer->SetBinContent(ibin, h_clusterDensity_bLayer->GetBinContent(ibin)/itb_area.at(layerID));
       h_clusterDensity_bLayer->SetBinError(ibin, h_clusterDensity_bLayer->GetBinError(ibin)/itb_area.at(layerID));
       h_hitDensity_bLayer->SetBinContent(ibin, h_hitDensity_bLayer->GetBinContent(ibin)/itb_area.at(layerID));
       h_hitDensity_bLayer->SetBinError(ibin, h_hitDensity_bLayer->GetBinError(ibin)/itb_area.at(layerID));
     }
     else if(x_val<30 && x_val>20 && h_clusters_by_bLayer_BX->GetBinContent(ibin)>0){
-      layerID = int((x_val - z_dir*20)/z_dir) - 1;
+      layerID = x_val - 20;
       h_clusterDensity_bLayer->SetBinContent(ibin, h_clusterDensity_bLayer->GetBinContent(ibin)/otb_area.at(layerID));
       h_clusterDensity_bLayer->SetBinError(ibin, h_clusterDensity_bLayer->GetBinError(ibin)/otb_area.at(layerID));
       h_hitDensity_bLayer->SetBinContent(ibin, h_hitDensity_bLayer->GetBinContent(ibin)/otb_area.at(layerID));
