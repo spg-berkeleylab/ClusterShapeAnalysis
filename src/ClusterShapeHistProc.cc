@@ -596,21 +596,21 @@ void ClusterShapeHistProc::end()
   //barrel density
   for(int ibin=1; ibin<=h_clusters_by_bLayer_BX->GetNbinsX(); ibin++){
     x_val = h_clusters_by_bLayer_BX->GetBinLowEdge(ibin);
-    if(x_val<10 && x_val>0 && h_clusters_by_bLayer_BX->GetBinContent(ibin)>0){
+    if(x_val<10 && x_val>=0 && h_clusters_by_bLayer_BX->GetBinContent(ibin)>0){
       layerID = x_val;
       h_clusterDensity_bLayer->SetBinContent(ibin, h_clusterDensity_bLayer->GetBinContent(ibin)/vxb_area.at(layerID));
       h_clusterDensity_bLayer->SetBinError(ibin, h_clusterDensity_bLayer->GetBinError(ibin)/vxb_area.at(layerID));
       h_hitDensity_bLayer->SetBinContent(ibin, h_hitDensity_bLayer->GetBinContent(ibin)/vxb_area.at(layerID));
       h_hitDensity_bLayer->SetBinError(ibin, h_hitDensity_bLayer->GetBinError(ibin)/vxb_area.at(layerID));
     }
-    else if(x_val<20 && x_val>10 && h_clusters_by_bLayer_BX->GetBinContent(ibin)>0){
+    else if(x_val<20 && x_val>=10 && h_clusters_by_bLayer_BX->GetBinContent(ibin)>0){
       layerID = x_val - 10;
       h_clusterDensity_bLayer->SetBinContent(ibin, h_clusterDensity_bLayer->GetBinContent(ibin)/itb_area.at(layerID));
       h_clusterDensity_bLayer->SetBinError(ibin, h_clusterDensity_bLayer->GetBinError(ibin)/itb_area.at(layerID));
       h_hitDensity_bLayer->SetBinContent(ibin, h_hitDensity_bLayer->GetBinContent(ibin)/itb_area.at(layerID));
       h_hitDensity_bLayer->SetBinError(ibin, h_hitDensity_bLayer->GetBinError(ibin)/itb_area.at(layerID));
     }
-    else if(x_val<30 && x_val>20 && h_clusters_by_bLayer_BX->GetBinContent(ibin)>0){
+    else if(x_val<30 && x_val>=20 && h_clusters_by_bLayer_BX->GetBinContent(ibin)>0){
       layerID = x_val - 20;
       h_clusterDensity_bLayer->SetBinContent(ibin, h_clusterDensity_bLayer->GetBinContent(ibin)/otb_area.at(layerID));
       h_clusterDensity_bLayer->SetBinError(ibin, h_clusterDensity_bLayer->GetBinError(ibin)/otb_area.at(layerID));
