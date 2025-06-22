@@ -150,8 +150,20 @@ private:
   TH1* h_thclen_layer6;
   TH1* h_thclen_layer7;
   TH1* h_thclen_layer8;
+  //hits per cluster per layer cut: 
+  TH1* h_thclen_cut;
+  TH1* h_thclen_layer0_cut;
+  TH1* h_thclen_layer1_cut;
+  TH1* h_thclen_layer2_cut;
+  TH1* h_thclen_layer3_cut;
+  TH1* h_thclen_layer4_cut;
+  TH1* h_thclen_layer5_cut;
+  TH1* h_thclen_layer6_cut;
+  TH1* h_thclen_layer7_cut;
+  TH1* h_thclen_layer8_cut;
   //2D
   TH2* h_toa_edepCluster;
+  TH2* h_cluster_edep_thlen;
   //3D Histos: 
   TH3* h_3DPosition_digi;
   TH3* h_3DPosition_cdigi;  
