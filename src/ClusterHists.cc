@@ -13,11 +13,21 @@
 
 #include "DD4hep/Detector.h"
 #include "DD4hep/DD4hepUnits.h"
-#include "/home/julietwright/work/TrkHitsStudiesWorkspace/packages/MarlinTrkProcessors/source/Utils/include/FilterTimeHits.h"
+#include "/global/cfs/cdirs/atlas/juliet/work/TrkHitsStudiesWorkspace/packages/MarlinTrkProcessors/source/Utils/include/FilterTimeHits.h"
 
 
 ClusterHists::ClusterHists()
 {
+
+  //Calculate the MPV scaling
+  float mpv = 74e-6; //GeV
+  float edp_rangeMax = 10 * mpv; //GeV 
+  //float edp_binWidth = 20e-7; //[GeV] = 2000eV, each bin has a width of 2000 eV 
+  float edp_binNum = 60; //edp_rangeMax/edp_binWidth; //bin number will be the same for electrons and GeV units
+  //3.7 eV = 1 e, ou, 3.7e-9 GeV = 1e
+  float edp_rangeMax_e = 10 * mpv / (3.7e-9); //range in electrons
+  float edp_binNum_e = 5000; //10*edp_binNum;
+
   h_size_theta_y    = new TH2F("cluster_size_vs_theta_y" , ";Cluster #theta; Cluster size" , 100, 0,  3.14,  11,  -0.5,  10.5  );
   h_size_theta_x    = new TH2F("cluster_size_vs_theta_x" , ";Cluster #theta; Cluster size" , 100, 0,  3.14,  11,  -0.5,  10.5  );
   h_size_theta_tot  = new TH2F("cluster_size_vs_theta_tot" , ";Cluster #theta; Cluster size" , 100, 0,  3.14,  11,  -0.5,  10.5  );
@@ -34,14 +44,14 @@ ClusterHists::ClusterHists()
   h_clusters_by_layer   = new TH1F("numClusters_by_layer"      , ";Layer Index; Number of Clusters",8,0,8);
   h_hits_by_layer   = new TH1F("numhits_by_layer"      , ";Layer Index; Number of Hits",8,0,8);
   h_theta         = new TH1F("theta"                 , ";Theta;Number of Clusters"       ,100,0,3.15);
-  h_cluster_edep     = new TH1F("Clusters_edep"          , ";Energy Deposited (GeV);Clusters" ,100,0,0.0005);
-  h_hit_edep     = new TH1F("Hits_edep"          , ";Deposited charge (electrons);Hits" ,5000, 0, 50000);//5000, 0, 50000 Change JULIET
+  h_cluster_edep     = new TH1F("Clusters_edep"          , ";Energy Deposited (GeV);Clusters" ,edp_binNum,0,edp_rangeMax);
+  h_hit_edep     = new TH1F("Hits_edep"          , ";Deposited charge (electrons);Hits" ,edp_binNum_e,0,edp_rangeMax_e);//5000, 0, 50000 Change JULIET
   h_edep_r   = new TH2F("edep_vs_r" , ";Cluster R (x^2+y^2)^(1/2) (mm); Energy Deposited (GeV)" , 100, 20,  120,  100,  0,  0.002 );
   h_edep_cluster   = new TH2F("edep_vs_cluster_size" , "; Energy Deposited (GeV); Total Cluster Size" ,100,  0,  0.002, 100, -0.5, 99.5 );
   h_toa_edepCluster = new TH2F("toa_vs_edepCluster", "; Time of Arrival [ns];Energy Deposited [GeV]", 100, 0, 10, 100, 0, 0.0005); //--JULIET
   
   // Create position histograms for tracker hits
-  int numbins_all = 1000;
+  int numbins_all = 1000; //change this for 10 mm bins 
   int rmin_all = 0;
   int rmax_all = 1600;
   int zmin_all = -2500;
@@ -88,70 +98,86 @@ ClusterHists::ClusterHists()
   h_x_y_vx = new TH2F("x_y_vx" , ";x_y ; r"        , numbins_vx, -rmax_vx, rmax_vx, numbins_vx, -rmax_vx, rmax_vx);
 
   //create histograms for 1st layer in full silicon tracking detector: EDEP & Time
-  h_cluster_edep_layer0   = new TH1F("Clusters_edep_layer0", ";Energy Deposited (GeV);Clusters" ,200,0,0.0005);
-  h_cluster_edep_layer1   = new TH1F("Clusters_edep_layer1", ";Energy Deposited (GeV);Clusters" ,200,0,0.0005);
-  h_cluster_edep_layer2   = new TH1F("Clusters_edep_layer2", ";Energy Deposited (GeV);Clusters" ,200,0,0.0005);
-  h_cluster_edep_layer3   = new TH1F("Clusters_edep_layer3", ";Energy Deposited (GeV);Clusters" ,200,0,0.0005);
-  h_cluster_edep_layer4   = new TH1F("Clusters_edep_layer4", ";Energy Deposited (GeV);Clusters" ,200,0,0.0005);
-  h_cluster_edep_layer5   = new TH1F("Clusters_edep_layer5", ";Energy Deposited (GeV);Clusters" ,200,0,0.0005);
-  h_cluster_edep_layer6   = new TH1F("Clusters_edep_layer6", ";Energy Deposited (GeV);Clusters" ,200,0,0.0005);
-  h_cluster_edep_layer7   = new TH1F("Clusters_edep_layer7", ";Energy Deposited (GeV);Clusters" ,200,0,0.0005);
-  h_cluster_edep_layer8   = new TH1F("Clusters_edep_layer8", ";Energy Deposited (GeV);Clusters" ,200,0,0.0005);
+  h_cluster_edep_layer0   = new TH1F("Clusters_edep_layer0", ";Energy Deposited (GeV);Clusters" ,edp_binNum,0,edp_rangeMax);
+  h_cluster_edep_layer1   = new TH1F("Clusters_edep_layer1", ";Energy Deposited (GeV);Clusters" ,edp_binNum,0,edp_rangeMax);
+  h_cluster_edep_layer2   = new TH1F("Clusters_edep_layer2", ";Energy Deposited (GeV);Clusters" ,edp_binNum,0,edp_rangeMax);
+  h_cluster_edep_layer3   = new TH1F("Clusters_edep_layer3", ";Energy Deposited (GeV);Clusters" ,edp_binNum,0,edp_rangeMax);
+  h_cluster_edep_layer4   = new TH1F("Clusters_edep_layer4", ";Energy Deposited (GeV);Clusters" ,edp_binNum,0,edp_rangeMax);
+  h_cluster_edep_layer5   = new TH1F("Clusters_edep_layer5", ";Energy Deposited (GeV);Clusters" ,edp_binNum,0,edp_rangeMax);
+  h_cluster_edep_layer6   = new TH1F("Clusters_edep_layer6", ";Energy Deposited (GeV);Clusters" ,edp_binNum,0,edp_rangeMax);
+  h_cluster_edep_layer7   = new TH1F("Clusters_edep_layer7", ";Energy Deposited (GeV);Clusters" ,edp_binNum,0,edp_rangeMax);
+  h_cluster_edep_layer8   = new TH1F("Clusters_edep_layer8", ";Energy Deposited (GeV);Clusters" ,edp_binNum,0,edp_rangeMax);
 
   //time-energy cluster cut: 
-  h_cluster_edep_Tcut     = new TH1F("Clusters_edep_Tcut", ";Energy Deposited (GeV);Clusters" ,100,0,0.0005);
-  h_cluster_edep_Tcut_layer0   = new TH1F("Clusters_edep_Tcut_layer0", ";Energy Deposited (GeV);Clusters" ,200,0,0.0005);
-  h_cluster_edep_Tcut_layer1   = new TH1F("Clusters_edep_Tcut_layer1", ";Energy Deposited (GeV);Clusters" ,200,0,0.0005);
-  h_cluster_edep_Tcut_layer2   = new TH1F("Clusters_edep_Tcut_layer2", ";Energy Deposited (GeV);Clusters" ,200,0,0.0005);
-  h_cluster_edep_Tcut_layer3   = new TH1F("Clusters_edep_Tcut_layer3", ";Energy Deposited (GeV);Clusters" ,200,0,0.0005);
-  h_cluster_edep_Tcut_layer4   = new TH1F("Clusters_edep_Tcut_layer4", ";Energy Deposited (GeV);Clusters" ,200,0,0.0005);
-  h_cluster_edep_Tcut_layer5   = new TH1F("Clusters_edep_Tcut_layer5", ";Energy Deposited (GeV);Clusters" ,200,0,0.0005);
-  h_cluster_edep_Tcut_layer6   = new TH1F("Clusters_edep_Tcut_layer6", ";Energy Deposited (GeV);Clusters" ,200,0,0.0005);
-  h_cluster_edep_Tcut_layer7   = new TH1F("Clusters_edep_Tcut_layer7", ";Energy Deposited (GeV);Clusters" ,200,0,0.0005);
+  // h_cluster_edep_Tcut     = new TH1F("Clusters_edep_Tcut", ";Energy Deposited (GeV);Clusters" ,200,0,0.0005);
+  // h_cluster_edep_Tcut_layer0   = new TH1F("Clusters_edep_Tcut_layer0", ";Energy Deposited (GeV);Clusters" ,200,0,0.0005);
+  // h_cluster_edep_Tcut_layer1   = new TH1F("Clusters_edep_Tcut_layer1", ";Energy Deposited (GeV);Clusters" ,200,0,0.0005);
+  // h_cluster_edep_Tcut_layer2   = new TH1F("Clusters_edep_Tcut_layer2", ";Energy Deposited (GeV);Clusters" ,200,0,0.0005);
+  // h_cluster_edep_Tcut_layer3   = new TH1F("Clusters_edep_Tcut_layer3", ";Energy Deposited (GeV);Clusters" ,200,0,0.0005);
+  // h_cluster_edep_Tcut_layer4   = new TH1F("Clusters_edep_Tcut_layer4", ";Energy Deposited (GeV);Clusters" ,200,0,0.0005);
+  // h_cluster_edep_Tcut_layer5   = new TH1F("Clusters_edep_Tcut_layer5", ";Energy Deposited (GeV);Clusters" ,200,0,0.0005);
+  // h_cluster_edep_Tcut_layer6   = new TH1F("Clusters_edep_Tcut_layer6", ";Energy Deposited (GeV);Clusters" ,200,0,0.0005);
+  // h_cluster_edep_Tcut_layer7   = new TH1F("Clusters_edep_Tcut_layer7", ";Energy Deposited (GeV);Clusters" ,200,0,0.0005);
 
-  h_trackerhit_time_Tcut  = new TH1F("trackerhit_time_Tcut", ";Time (ns);Events" ,800,-1,20);
-  h_trackerhit_time_Tcut_layer0  = new TH1F("trackerhit_time_Tcut_layer0", ";Time (ns);Events" ,800,-1,20);
-  h_trackerhit_time_Tcut_layer1  = new TH1F("trackerhit_time_Tcut_layer1", ";Time (ns);Events" ,800,-1,20);
-  h_trackerhit_time_Tcut_layer2  = new TH1F("trackerhit_time_Tcut_layer2", ";Time (ns);Events" ,800,-1,20);
-  h_trackerhit_time_Tcut_layer3  = new TH1F("trackerhit_time_Tcut_layer3", ";Time (ns);Events" ,800,-1,20);
-  h_trackerhit_time_Tcut_layer4  = new TH1F("trackerhit_time_Tcut_layer4", ";Time (ns);Events" ,800,-1,20);
-  h_trackerhit_time_Tcut_layer5  = new TH1F("trackerhit_time_Tcut_layer5", ";Time (ns);Events" ,800,-1,20);
-  h_trackerhit_time_Tcut_layer6  = new TH1F("trackerhit_time_Tcut_layer6", ";Time (ns);Events" ,800,-1,20);
-  h_trackerhit_time_Tcut_layer7  = new TH1F("trackerhit_time_Tcut_layer7", ";Time (ns);Events" ,800,-1,20); 
+  // h_trackerhit_time_Tcut  = new TH1F("trackerhit_time_Tcut", ";Time (ns);Events" ,800,-1,20);
+  // h_trackerhit_time_Tcut_layer0  = new TH1F("trackerhit_time_Tcut_layer0", ";Time (ns);Events" ,800,-1,20);
+  // h_trackerhit_time_Tcut_layer1  = new TH1F("trackerhit_time_Tcut_layer1", ";Time (ns);Events" ,800,-1,20);
+  // h_trackerhit_time_Tcut_layer2  = new TH1F("trackerhit_time_Tcut_layer2", ";Time (ns);Events" ,800,-1,20);
+  // h_trackerhit_time_Tcut_layer3  = new TH1F("trackerhit_time_Tcut_layer3", ";Time (ns);Events" ,800,-1,20);
+  // h_trackerhit_time_Tcut_layer4  = new TH1F("trackerhit_time_Tcut_layer4", ";Time (ns);Events" ,800,-1,20);
+  // h_trackerhit_time_Tcut_layer5  = new TH1F("trackerhit_time_Tcut_layer5", ";Time (ns);Events" ,800,-1,20);
+  // h_trackerhit_time_Tcut_layer6  = new TH1F("trackerhit_time_Tcut_layer6", ";Time (ns);Events" ,800,-1,20);
+  // h_trackerhit_time_Tcut_layer7  = new TH1F("trackerhit_time_Tcut_layer7", ";Time (ns);Events" ,800,-1,20); 
 
-  h_hit_edep_layer0   = new TH1F("hit_edep_layer0", ";Deposited charge (electrons);Hits" ,5000, 0, 50000);
-  h_hit_edep_layer1   = new TH1F("hit_edep_layer1", ";Deposited charge (electrons);Hits" ,5000, 0, 50000);
-  h_hit_edep_layer2   = new TH1F("hit_edep_layer2", ";Deposited charge (electrons);Hits" ,5000, 0, 50000);
-  h_hit_edep_layer3   = new TH1F("hit_edep_layer3", ";Deposited charge (electrons);Hits" ,5000, 0, 50000);
-  h_hit_edep_layer4   = new TH1F("hit_edep_layer4", ";Deposited charge (electrons);Hits" ,5000, 0, 50000);
-  h_hit_edep_layer5   = new TH1F("hit_edep_layer5", ";Deposited charge (electrons);Hits" ,5000, 0, 50000);
-  h_hit_edep_layer6   = new TH1F("hit_edep_layer6", ";Deposited charge (electrons);Hits" ,5000, 0, 50000); //(100, 0, 36000)
-  h_hit_edep_layer7   = new TH1F("hit_edep_layer7", ";Deposited charge (electrons);Hits" ,5000, 0, 50000);//5000,0,50000
-  h_hit_edep_layer8   = new TH1F("hit_edep_layer8", ";Deposited charge (electrons);Hits" ,5000, 0, 50000);//5000,0,50000
+  h_hit_edep_layer0   = new TH1F("hit_edep_layer0", ";Deposited charge (electrons);Hits" ,edp_binNum_e,0,edp_rangeMax_e); //5000, 0, 50000);
+  h_hit_edep_layer1   = new TH1F("hit_edep_layer1", ";Deposited charge (electrons);Hits" ,edp_binNum_e,0,edp_rangeMax_e);
+  h_hit_edep_layer2   = new TH1F("hit_edep_layer2", ";Deposited charge (electrons);Hits" ,edp_binNum_e,0,edp_rangeMax_e);
+  h_hit_edep_layer3   = new TH1F("hit_edep_layer3", ";Deposited charge (electrons);Hits" ,edp_binNum_e,0,edp_rangeMax_e);
+  h_hit_edep_layer4   = new TH1F("hit_edep_layer4", ";Deposited charge (electrons);Hits" ,edp_binNum_e,0,edp_rangeMax_e);
+  h_hit_edep_layer5   = new TH1F("hit_edep_layer5", ";Deposited charge (electrons);Hits" ,edp_binNum_e,0,edp_rangeMax_e);
+  h_hit_edep_layer6   = new TH1F("hit_edep_layer6", ";Deposited charge (electrons);Hits" ,edp_binNum_e,0,edp_rangeMax_e); //(100, 0, 36000)
+  h_hit_edep_layer7   = new TH1F("hit_edep_layer7", ";Deposited charge (electrons);Hits" ,edp_binNum_e,0,edp_rangeMax_e);//5000,0,50000
+  h_hit_edep_layer8   = new TH1F("hit_edep_layer8", ";Deposited charge (electrons);Hits" ,edp_binNum_e,0,edp_rangeMax_e);//5000,0,50000
   
-  h_trackerhit_time  = new TH1F("trackerhit_time", ";Time (ns);Events" ,800,-1,20);
-  h_trackerhit_time_layer0  = new TH1F("trackerhit_time_layer0", ";Time (ns);Events" ,800,-1,20);
-  h_trackerhit_time_layer1  = new TH1F("trackerhit_time_layer1", ";Time (ns);Events" ,800,-1,20);
-  h_trackerhit_time_layer2  = new TH1F("trackerhit_time_layer2", ";Time (ns);Events" ,800,-1,20);
-  h_trackerhit_time_layer3  = new TH1F("trackerhit_time_layer3", ";Time (ns);Events" ,800,-1,20);
-  h_trackerhit_time_layer4  = new TH1F("trackerhit_time_layer4", ";Time (ns);Events" ,800,-1,20);
-  h_trackerhit_time_layer5  = new TH1F("trackerhit_time_layer5", ";Time (ns);Events" ,800,-1,20);
-  h_trackerhit_time_layer6  = new TH1F("trackerhit_time_layer6", ";Time (ns);Events" ,800,-1,20);
-  h_trackerhit_time_layer7  = new TH1F("trackerhit_time_layer7", ";Time (ns);Events" ,800,-1,20);
-  h_trackerhit_time_layer8  = new TH1F("trackerhit_time_layer8", ";Time (ns);Events" ,800,-1,20);
+  h_trackerhit_time  = new TH1F("trackerhit_time", ";Time (ns);Events" ,200000,0,20); //-0.2 - 0.5
+  h_trackerhit_time_layer0  = new TH1F("trackerhit_time_layer0", ";Time (ns);Events" ,200000,0,20);
+  h_trackerhit_time_layer1  = new TH1F("trackerhit_time_layer1", ";Time (ns);Events" ,200000,0,20);
+  h_trackerhit_time_layer2  = new TH1F("trackerhit_time_layer2", ";Time (ns);Events" ,200000,0,20);
+  h_trackerhit_time_layer3  = new TH1F("trackerhit_time_layer3", ";Time (ns);Events" ,200000,0,20);
+  h_trackerhit_time_layer4  = new TH1F("trackerhit_time_layer4", ";Time (ns);Events" ,200000,0,20);
+  h_trackerhit_time_layer5  = new TH1F("trackerhit_time_layer5", ";Time (ns);Events" ,200000,0,20);
+  h_trackerhit_time_layer6  = new TH1F("trackerhit_time_layer6", ";Time (ns);Events" ,200000,0,20);
+  h_trackerhit_time_layer7  = new TH1F("trackerhit_time_layer7", ";Time (ns);Events" ,200000,0,20);
+  h_trackerhit_time_layer8  = new TH1F("trackerhit_time_layer8", ";Time (ns);Events" ,200000,0,20);
 
   //number of hits per cluster
-  h_thclen = new TH1F("thclen", ";Number of Hit Constituents; Events", 60, 0, 50); //Total number of hit constituents 
+  h_thclen = new TH1F("thclen", ";Number of Hit Constituents; Events", 50, 0, 50); //Total number of hit constituents 
   //number of hits per cluster per layer: 
-  h_thclen_layer0 = new TH1F("thclen_layer0", ";Number of Hit Constituents; Events", 60, 0, 50);
-  h_thclen_layer1 = new TH1F("thclen_layer1", ";Number of Hit Constituents; Events", 60, 0, 50);
-  h_thclen_layer2 = new TH1F("thclen_layer2", ";Number of Hit Constituents; Events", 60, 0, 50);
-  h_thclen_layer3 = new TH1F("thclen_layer3", ";Number of Hit Constituents; Events", 60, 0, 50);
-  h_thclen_layer4 = new TH1F("thclen_layer4", ";Number of Hit Constituents; Events", 60, 0, 50);
-  h_thclen_layer5 = new TH1F("thclen_layer5", ";Number of Hit Constituents; Events", 60, 0, 50);
-  h_thclen_layer6 = new TH1F("thclen_layer6", ";Number of Hit Constituents; Events", 60, 0, 50);
-  h_thclen_layer7 = new TH1F("thclen_layer7", ";Number of Hit Constituents; Events", 60, 0, 50);
-  h_thclen_layer8 = new TH1F("thclen_layer8", ";Number of Hit Constituents; Events", 60, 0, 50);
+  h_thclen_layer0 = new TH1F("thclen_layer0", ";Number of Hit Constituents; Events", 50, 0, 50);
+  h_thclen_layer1 = new TH1F("thclen_layer1", ";Number of Hit Constituents; Events", 50, 0, 50);
+  h_thclen_layer2 = new TH1F("thclen_layer2", ";Number of Hit Constituents; Events", 50, 0, 50);
+  h_thclen_layer3 = new TH1F("thclen_layer3", ";Number of Hit Constituents; Events", 50, 0, 50);
+  h_thclen_layer4 = new TH1F("thclen_layer4", ";Number of Hit Constituents; Events", 50, 0, 50);
+  h_thclen_layer5 = new TH1F("thclen_layer5", ";Number of Hit Constituents; Events", 50, 0, 50);
+  h_thclen_layer6 = new TH1F("thclen_layer6", ";Number of Hit Constituents; Events", 50, 0, 50);
+  h_thclen_layer7 = new TH1F("thclen_layer7", ";Number of Hit Constituents; Events", 50, 0, 50);
+  h_thclen_layer8 = new TH1F("thclen_layer8", ";Number of Hit Constituents; Events", 50, 0, 50);
+
+  //number of hits per cluster for hit clusters > 15:
+  h_thclen_cut = new TH1F("thclen_cut", ";Number of Hit Constituents; Events", 50, 15, 65); //Total number of hit constituents 
+  //number of hits per cluster per layer: 
+  h_thclen_layer0_cut = new TH1F("thclen_layer0_cut", ";Number of Hit Constituents; Events", 50, 15, 65);
+  h_thclen_layer1_cut = new TH1F("thclen_layer1_cut", ";Number of Hit Constituents; Events", 50, 15, 65);
+  h_thclen_layer2_cut = new TH1F("thclen_layer2_cut", ";Number of Hit Constituents; Events", 50, 15, 65);
+  h_thclen_layer3_cut = new TH1F("thclen_layer3_cut", ";Number of Hit Constituents; Events", 50, 15, 65);
+  h_thclen_layer4_cut = new TH1F("thclen_layer4_cut", ";Number of Hit Constituents; Events", 50, 15, 65);
+  h_thclen_layer5_cut = new TH1F("thclen_layer5_cut", ";Number of Hit Constituents; Events", 50, 15, 65);
+  h_thclen_layer6_cut = new TH1F("thclen_layer6_cut", ";Number of Hit Constituents; Events", 50, 15, 65);
+  h_thclen_layer7_cut = new TH1F("thclen_layer7_cut", ";Number of Hit Constituents; Events", 50, 15, 65);
+  h_thclen_layer8_cut = new TH1F("thclen_layer8_cut", ";Number of Hit Constituents; Events", 50, 15, 65);
+
+  //2D histogram for all detector layers for Cluster Edep vs Number of Hits per Cluster:
+  h_cluster_edep_thlen = new TH2F("edep_vs_hitNum" , ";Hits/Cluster; Energy Deposited (GeV)" , 50, 15, 65, edp_binNum,0,edp_rangeMax);
 
 //3D HISTO for X vs Y vs Z position in digitized and truth 
 h_3DPosition_digi = new TH3F("3DPosition_digi", "3D Digitized Position;x[mm];y[mm];z[mm]", 100, 0, 1600, 100, 0, 1600, 100,  -2500, 2500);
@@ -168,7 +194,7 @@ void ClusterHists::fill(const EVENT::TrackerHit* trkhit)
   dd4hep::rec::Vector3D pos = trkhit->getPosition();
   double hitR = pos.r();
   double m_beta = 1.0;
-  double m_time_min = -90.0; //ns
+  double m_time_min = -90.0; //ns - get min and max from the config file
   double m_time_max = 90.0; //ns
   double dt = hitR / (TMath::C() * m_beta / 1e6);
   toa -= dt;
@@ -271,6 +297,12 @@ void ClusterHists::fill(const EVENT::TrackerHit* trkhit)
     if (toa < m_time_min || toa > m_time_max){
       continue;
     }
+
+    //hits/cluster cut: 
+    if(rawHits.size() > 15){
+      h_thclen_cut->Fill(rawHits.size());
+      h_cluster_edep_thlen->Fill(rawHits.size(), EDep);
+    }
       
     h_hits_by_layer->Fill(layerID);
     h_z_r_hits->Fill(z,r);
@@ -288,10 +320,11 @@ void ClusterHists::fill(const EVENT::TrackerHit* trkhit)
         h_cluster_edep_layer0->Fill(EDep);
         h_trackerhit_time_layer0->Fill(toa);
         h_thclen_layer0->Fill(rawHits.size());
-        if(toa < 0.2){
-          h_cluster_edep_Tcut_layer0->Fill(EDep);
-          h_trackerhit_time_Tcut_layer0->Fill(toa);
-        }
+        if(rawHits.size() > 15) h_thclen_layer0_cut->Fill(rawHits.size());
+        // if(toa < 0.2){
+        //   h_cluster_edep_Tcut_layer0->Fill(EDep);
+        //   h_trackerhit_time_Tcut_layer0->Fill(toa);
+        // }
       }
       h_hit_edep_layer0->Fill(hitConstituent->getEDep()); //energy in electrons -- Juliet
       
@@ -306,10 +339,11 @@ void ClusterHists::fill(const EVENT::TrackerHit* trkhit)
         h_cluster_edep_layer1->Fill(EDep);
         h_trackerhit_time_layer1->Fill(toa); //time of arrive in layer 2 -- Juliet
         h_thclen_layer1->Fill(rawHits.size());
-        if(toa < 0.2){
-          h_cluster_edep_Tcut_layer1->Fill(EDep);
-          h_trackerhit_time_Tcut_layer1->Fill(toa);
-        }
+        if(rawHits.size() > 15) h_thclen_layer1_cut->Fill(rawHits.size());
+        // if(toa < 0.2){
+        //   h_cluster_edep_Tcut_layer1->Fill(EDep);
+        //   h_trackerhit_time_Tcut_layer1->Fill(toa);
+        // }
       }   
       h_hit_edep_layer1->Fill(hitConstituent->getEDep()); //energy in electrons -- Juliet
     }
@@ -320,10 +354,11 @@ void ClusterHists::fill(const EVENT::TrackerHit* trkhit)
         h_cluster_edep_layer2->Fill(EDep);
         h_trackerhit_time_layer2->Fill(toa);
         h_thclen_layer2->Fill(rawHits.size());
-        if(toa < 0.2){
-          h_cluster_edep_Tcut_layer2->Fill(EDep);
-          h_trackerhit_time_Tcut_layer2->Fill(toa);
-        }
+        if(rawHits.size() > 15) h_thclen_layer2_cut->Fill(rawHits.size());
+        // if(toa < 0.2){
+        //   h_cluster_edep_Tcut_layer2->Fill(EDep);
+        //   h_trackerhit_time_Tcut_layer2->Fill(toa);
+        // }
       }
       h_hit_edep_layer2->Fill(hitConstituent->getEDep()); //energy in electrons -- Juliet
      
@@ -335,10 +370,11 @@ void ClusterHists::fill(const EVENT::TrackerHit* trkhit)
         h_cluster_edep_layer3->Fill(EDep);
         h_trackerhit_time_layer3->Fill(toa);
         h_thclen_layer3->Fill(rawHits.size());
-        if(toa < 0.2){
-          h_cluster_edep_Tcut_layer3->Fill(EDep);
-          h_trackerhit_time_Tcut_layer3->Fill(toa);
-        }
+        if(rawHits.size() > 15) h_thclen_layer3_cut->Fill(rawHits.size());
+        // if(toa < 0.2){
+        //   h_cluster_edep_Tcut_layer3->Fill(EDep);
+        //   h_trackerhit_time_Tcut_layer3->Fill(toa);
+        // }
       }
       h_hit_edep_layer3->Fill(hitConstituent->getEDep()); //energy in electrons -- Juliet
     }
@@ -349,10 +385,11 @@ void ClusterHists::fill(const EVENT::TrackerHit* trkhit)
         h_cluster_edep_layer4->Fill(EDep);
         h_trackerhit_time_layer4->Fill(toa);
         h_thclen_layer4->Fill(rawHits.size());
-        if(toa < 0.2){
-          h_cluster_edep_Tcut_layer4->Fill(EDep);
-          h_trackerhit_time_Tcut_layer4->Fill(toa);
-        }
+        if(rawHits.size() > 15) h_thclen_layer4_cut->Fill(rawHits.size());
+        // if(toa < 0.2){
+        //   h_cluster_edep_Tcut_layer4->Fill(EDep);
+        //   h_trackerhit_time_Tcut_layer4->Fill(toa);
+        // }
       }
       h_hit_edep_layer4->Fill(hitConstituent->getEDep()); //energy in electrons -- Juliet
     }
@@ -363,10 +400,11 @@ void ClusterHists::fill(const EVENT::TrackerHit* trkhit)
         h_cluster_edep_layer5->Fill(EDep);
         h_trackerhit_time_layer5->Fill(toa);
         h_thclen_layer5->Fill(rawHits.size());
-        if(toa < 0.2){
-          h_cluster_edep_Tcut_layer5->Fill(EDep);
-          h_trackerhit_time_Tcut_layer5->Fill(toa);
-        }
+        if(rawHits.size() > 15) h_thclen_layer5_cut->Fill(rawHits.size());
+        // if(toa < 0.2){
+        //   h_cluster_edep_Tcut_layer5->Fill(EDep);
+        //   h_trackerhit_time_Tcut_layer5->Fill(toa);
+        // }
       }
       h_hit_edep_layer5->Fill(hitConstituent->getEDep()); //energy in electrons -- Juliet
     }
@@ -377,10 +415,11 @@ void ClusterHists::fill(const EVENT::TrackerHit* trkhit)
         h_cluster_edep_layer6->Fill(EDep);
         h_trackerhit_time_layer6->Fill(toa);
         h_thclen_layer6->Fill(rawHits.size());
-        if(toa < 0.2){
-          h_cluster_edep_Tcut_layer6->Fill(EDep);
-          h_trackerhit_time_Tcut_layer6->Fill(toa);
-        }
+        if(rawHits.size() > 15) h_thclen_layer6_cut->Fill(rawHits.size());
+        // if(toa < 0.2){
+        //   h_cluster_edep_Tcut_layer6->Fill(EDep);
+        //   h_trackerhit_time_Tcut_layer6->Fill(toa);
+        // }
       }
       h_hit_edep_layer6->Fill(hitConstituent->getEDep()); //energy in electrons -- Juliet
     }
@@ -391,10 +430,11 @@ void ClusterHists::fill(const EVENT::TrackerHit* trkhit)
         h_cluster_edep_layer7->Fill(EDep);
         h_trackerhit_time_layer7->Fill(toa);
         h_thclen_layer7->Fill(rawHits.size());
-        if(toa < 0.2){
-          h_cluster_edep_Tcut_layer7->Fill(EDep);
-          h_trackerhit_time_Tcut_layer7->Fill(toa);
-        }
+        if(rawHits.size() > 15) h_thclen_layer7_cut->Fill(rawHits.size());
+        // if(toa < 0.2){
+        //   h_cluster_edep_Tcut_layer7->Fill(EDep);
+        //   h_trackerhit_time_Tcut_layer7->Fill(toa);
+        // }
       }
       h_hit_edep_layer7->Fill(hitConstituent->getEDep()); //energy in electrons -- Juliet
     }
@@ -405,6 +445,7 @@ void ClusterHists::fill(const EVENT::TrackerHit* trkhit)
         h_cluster_edep_layer8->Fill(EDep);
         h_trackerhit_time_layer8->Fill(toa);
         h_thclen_layer8->Fill(rawHits.size());
+        if(rawHits.size() > 15) h_thclen_layer8_cut->Fill(rawHits.size());
       }
       h_hit_edep_layer8->Fill(hitConstituent->getEDep()); //energy in electrons -- Juliet
     }
@@ -421,12 +462,12 @@ void ClusterHists::fill(const EVENT::TrackerHit* trkhit)
 
   h_cluster_edep->Fill(EDep);
   //NEW 2/19/2025
-  if (toa > m_time_min && toa < m_time_max){
-    if(toa < 0.2e-3){
-      h_cluster_edep_Tcut->Fill(EDep);
-      h_trackerhit_time_Tcut->Fill(toa);
-    }
-  }
+  // if (toa > m_time_min && toa < m_time_max){
+  //   if(toa < 0.2e-3){
+  //     h_cluster_edep_Tcut->Fill(EDep);
+  //     h_trackerhit_time_Tcut->Fill(toa);
+  //   }
+  // }
   h_edep_r->Fill(r,EDep);
   h_edep_cluster->Fill(EDep,cluster_size_tot);
 
