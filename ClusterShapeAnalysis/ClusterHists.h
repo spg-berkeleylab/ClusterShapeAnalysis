@@ -164,6 +164,7 @@ private:
   //2D
   TH2* h_toa_edepCluster;
   TH2* h_cluster_edep_thlen;
+  TH2* h_cluster_edep_thlen_cut;
   //3D Histos: 
   TH3* h_3DPosition_digi;
   TH3* h_3DPosition_cdigi;  
