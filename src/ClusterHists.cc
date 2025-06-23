@@ -202,13 +202,13 @@ void ClusterHists::fill(const EVENT::TrackerHit* trkhit)
   float EDep = trkhit->getEDep();
   float toa = trkhit->getTime(); //time of arrival -- Juliet
   // Correcting for the propagation time
-  /*dd4hep::rec::Vector3D pos = trkhit->getPosition();
+  dd4hep::rec::Vector3D pos = trkhit->getPosition();
   double hitR = pos.r();
   double m_beta = 1.0;
   double tmin = -0.09;//-90.0; //ns - get min and max from the config file
   double tmax = 0.15; //90.0; //ns
   double dt = hitR / (TMath::C() * m_beta / 1e6);
-  toa -= dt;*/
+  toa -= dt;
   
   
 
@@ -291,7 +291,7 @@ void ClusterHists::fill(const EVENT::TrackerHit* trkhit)
   h_theta->Fill(incidentTheta);
   h_cluster_pos->Fill(z,r);
   h_clusters_by_layer->Fill(layerID);
-  h_trackerhit_time->Fill(toa);//if (toa > tmin && toa < tmax) h_trackerhit_time->Fill(toa);
+  if (toa > tmin && toa < tmax) h_trackerhit_time->Fill(toa);
 
   // tracker hit hists
   h_x->Fill(x);  
@@ -305,9 +305,9 @@ void ClusterHists::fill(const EVENT::TrackerHit* trkhit)
     //lcio::TrackerHit *hitTracker = dynamic_cast<lcio::TrackerHit*>( rawHits[j] );
     
     //skip events out of the time range -> Correcting for the propagation time
-    // if (toa < tmin || toa > tmax){
-    //   continue;
-    // }
+    if (toa < tmin || toa > tmax){
+      continue;
+    }
 
     //hits/cluster cut: 
     if(rawHits.size() > 15){
