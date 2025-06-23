@@ -23,10 +23,39 @@ public:
   // Fill histograms with a single track hit
   void fill(const EVENT::TrackerHit* trkhit);
 
+  TH1* h_cluster_edep_BX;
+
 private:
   TH2* h_size_theta_y;
   TH2* h_size_theta_x;
   TH2* h_size_theta_tot;
+  TH2* h_size_theta_tot_0;
+  TH2* h_size_theta_tot_1;
+  TH2* h_size_theta_tot_2;
+  TH2* h_size_theta_tot_3;
+  TH2* h_size_theta_tot_4;
+  TH2* h_size_theta_tot_5;
+  TH2* h_size_theta_tot_6;
+  TH2* h_size_theta_tot_7;
+  TH2* h_size_theta_tot_8;
+  TH2* h_size_theta_x_0;
+  TH2* h_size_theta_x_1;
+  TH2* h_size_theta_x_2;
+  TH2* h_size_theta_x_3;
+  TH2* h_size_theta_x_4;
+  TH2* h_size_theta_x_5;
+  TH2* h_size_theta_x_6;
+  TH2* h_size_theta_x_7;
+  TH2* h_size_theta_x_8;
+  TH2* h_size_theta_y_0;
+  TH2* h_size_theta_y_1;
+  TH2* h_size_theta_y_2;
+  TH2* h_size_theta_y_3;
+  TH2* h_size_theta_y_4;
+  TH2* h_size_theta_y_5;
+  TH2* h_size_theta_y_6;
+  TH2* h_size_theta_y_7;
+  TH2* h_size_theta_y_8;
   TH2* h_size_r_tot;
   TH2* h_size_r_tot_0;
   TH2* h_size_r_tot_1;
@@ -73,7 +102,11 @@ private:
   TH1* h_r_layer6;
   TH1* h_r_layer7;
   TH1* h_r_layer8;
-
+  TH1* h_avgHits;
+  TH1* h_sysID;
+  TH1* h_cluster_timing;
+  TH1* h_hit_timing;
+  
   // vertex
   TH1* h_x_vx;  
   TH1* h_y_vx;  
@@ -81,4 +114,5 @@ private:
   TH1* h_r_vx;
   TH2* h_z_r_vx;
   TH2* h_x_y_vx;
+
 };
