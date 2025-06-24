@@ -118,7 +118,6 @@ private:
   TH2* h_z_r_vx;
   TH2* h_x_y_vx;
 
-<<<<<<< HEAD
   //time and edep cut for all layers -- juliet
   TH1* h_cluster_edep_Tcut;
   TH1* h_cluster_edep_Tcut_layer0;
@@ -203,6 +202,4 @@ private:
   TH3* h_3DPosition_digi;
   TH3* h_3DPosition_cdigi;  
   
-=======
->>>>>>> main
 };
