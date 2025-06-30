@@ -239,13 +239,13 @@ void ClusterHists::fill(const EVENT::TrackerHit* trkhit)
   float EDep = trkhit->getEDep();
   float toa = trkhit->getTime(); //time of arrival -- Juliet
   // Correcting for the propagation time
-  /*dd4hep::rec::Vector3D pos = trkhit->getPosition();
+  dd4hep::rec::Vector3D pos = trkhit->getPosition();
   double hitR = pos.r();
   double m_beta = 1.0;
-  double tmin = -0.09;//-90.0; //ns - get min and max from the config file
-  double tmax = 0.15; //90.0; //ns
+  // double tmin = -0.09;//-90.0; //ns - get min and max from the config file
+  // double tmax = 0.15; //90.0; //ns
   double dt = hitR / (TMath::C() * m_beta / 1e6);
-  toa -= dt;*/
+  toa -= dt;
   
   
 
