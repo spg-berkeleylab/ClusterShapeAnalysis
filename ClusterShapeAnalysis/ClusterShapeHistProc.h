@@ -92,10 +92,12 @@ private:
   TH1* h_clusterDensity_eLayer;
   TH1* h_hitDensity_bLayer;
   TH1* h_hitDensity_eLayer;
-  TH1* h_inPixPU;
+  TH1* h_inPixPU[9];
+  TH1* h_inPixPUTimeDiff[9];
   
   int nEvtTotal;
   int _muDet;
+
   //2D map of layer ID and active sensor area
   std::map<int, double> vxb_area;
   std::map<int, double> vxe_area;
@@ -104,6 +106,10 @@ private:
   std::map<int, double> otb_area;
   std::map<int, double> ote_area;
 
-  std::map<uint64_t, std::vector<lcio::SimTrackerHit*>> allPixels;
+  struct PixelData {
+    int layer;
+    std::vector<lcio::SimTrackerHit*> hits;
+  };
 
+  std::map<uint64_t, PixelData> allPixels;
 };

@@ -171,7 +171,7 @@ void ClusterShapeHistProc::init()
   _clusters_oe=std::make_shared<ClusterHists>();
 
   tree->cd("../");
-  h_trackerhit_timing = new TH1F("hit_timing", "Time of arrival of hits [ns]", 110, -10, 100);
+  h_trackerhit_timing = new TH1F("hit_timing", "Time of arrival of hits [ns]", 25000, -5, 20);
   h_clusters_by_bLayer   = new TH1F("numClusters_by_bLayer"      , ";Barrel Layer Index; Number of Clusters",30,0,30);
   h_hits_by_bLayer   = new TH1F("numhits_by_bLayer"      , ";Barrel Layer Index; Number of Hits",30,0,30);
   h_clusters_by_bLayer_BX   = new TH1F("numClusters_by_bLayer_BX"      , ";Barrel Layer Index; Number of Clusters / 1 BX",30,0,30);
@@ -184,7 +184,10 @@ void ClusterShapeHistProc::init()
   h_clusterDensity_eLayer = new TH1F("ClusterDensity_eLayer", ";Endcap Layer Index; Number of Clusters / 1 BX / cm^2",60,-30,30);
   h_hitDensity_bLayer = new TH1F("HitDensity_bLayer", ";Barrel Layer Index; Number of Hits / 1 BX / cm^2",30,0,30);
   h_hitDensity_eLayer = new TH1F("HitDensity_eLayer", ";Endcap Layer Index; Number of Hits / 1 BX / cm^2",60,-30,30);
-  h_inPixPU     = new TH1F("Hits_inPixPU"          , ";#Hits in same pixel; Number of pixels" ,50,0,50);
+  for(int i=0; i<=8; i++){
+    h_inPixPU[i]     = new TH1F(Form("Hits_inPixPU_vxbL%d", i), ";nHits in same pixel; Total number of hits" ,50,0,50);
+    h_inPixPUTimeDiff[i]     = new TH1F(Form("Hits_inPixPUTimeDiff_vxbL%d", i), ";Difference in time of arrival of hits in the same pixel [ns]; Total number of hits" ,1000,-5,5);
+  }
   nEvtTotal = 0;
 
   if(_muDet==0 || _muDet==1){ //MuCol_v1 or MAIA_v0 geometry
@@ -305,10 +308,21 @@ void ClusterShapeHistProc::processEvent( LCEvent * evt )
       _clusters_vb->fill(trkhit);
       LayerInfo(trkhit, 0);
     }
-  for (const auto& pair : allPixels) {
-    uint64_t key = pair.first;
-    const std::vector<lcio::SimTrackerHit*>& vec = pair.second;
-    h_inPixPU->Fill(vec.size());
+  for (const auto& [key, pixelData] : allPixels) {
+    uint64_t pixel_hash = key;
+    int layer = pixelData.layer;
+    const std::vector<lcio::SimTrackerHit*>& hits = pixelData.hits;
+    h_inPixPU[layer]->Fill(hits.size());
+    if(hits.size()>1){
+      //calculate time difference between each pair of hits for pixels with more than one hit
+      for(int i=0; i<hits.size()-1; i++){
+	lcio::SimTrackerHit *hitConstituent_i = dynamic_cast<lcio::SimTrackerHit*>( hits[i] );
+	for(int j=i+1; j<hits.size(); j++){
+	  lcio::SimTrackerHit *hitConstituent_j = dynamic_cast<lcio::SimTrackerHit*>( hits[j] );
+	  h_inPixPUTimeDiff[layer]->Fill(hitConstituent_i->getTime()-hitConstituent_j->getTime());
+	}
+      }
+    }
   }
   _clusters_vb->h_cluster_edep_BX->Scale(1/_clusters_vb->h_cluster_edep_BX->Integral());
 
@@ -529,7 +543,7 @@ void ClusterShapeHistProc::LayerInfo(const EVENT::TrackerHit* trkhit, int offset
     h_hitDensity_bLayer->Fill(layerID + offset, std::min((int)loopsize, 30));
   }
 
-  if(layerID==0 && systemID==1){ //only first layer of vertex barrel
+  if(systemID==1){ //only vertex barrel
     for (size_t j=0; j<loopsize; ++j) {
       lcio::SimTrackerHit *hitConstituent = dynamic_cast<lcio::SimTrackerHit*>( rawHits[j] );
       const double *localPos = hitConstituent->getPosition();
@@ -538,26 +552,14 @@ void ClusterShapeHistProc::LayerInfo(const EVENT::TrackerHit* trkhit, int offset
       UTIL::CellIDDecoder<lcio::SimTrackerHit> simdecoder(_encoderString);
       int16_t ladderID = simdecoder(hitConstituent)["module"];
       int16_t modID = 0;
-      if(z>=-130. && z<-104.)
-	modID = 0;
-      else if(z>=-104. && z<-78.)
-	modID = 1;
-      else if(z>=-78. && z<-52.)
-	modID = 2;
-      else if(z>=-52. && z<-26.)
-	modID = 3;
-      else if(z>=-26. && z<0)
-	modID = 4;
-      else if(z>=0. && z<26.)
-	modID = 5;
-      else if(z>=26. && z<52.)
-	modID = 6;
-      else if(z>=52. && z<78.)
-	modID = 7;
-      else if(z>=78. && z<104.)
-	modID = 8;
-      else
-	modID = 9;
+      int nmod = 5; //get from geometry
+      float layer_halflength = 65; //get from geometry
+      float mod_step = 2*layer_halflength/nmod;
+      
+      for(int i=1; i<=nmod; i++){
+	if(z>=(layer_halflength + mod_step*(i-1))  && z<(layer_halflength + mod_step*i))
+	  modID = i;
+      }
 
       uint64_t pixel_hash=0;
       pixel_hash |= ((uint64_t)x_local)<<48;
@@ -568,7 +570,11 @@ void ClusterShapeHistProc::LayerInfo(const EVENT::TrackerHit* trkhit, int offset
       if(allPixels.find(pixel_hash) == allPixels.end())
 	allPixels[pixel_hash] = {};
 
-      allPixels[pixel_hash].push_back(hitConstituent);
+      auto& pixelData = allPixels[pixel_hash];
+      if (pixelData.hits.empty()) {
+	pixelData.layer = layerID;
+      }
+      pixelData.hits.push_back(hitConstituent);
     }
   }
 
