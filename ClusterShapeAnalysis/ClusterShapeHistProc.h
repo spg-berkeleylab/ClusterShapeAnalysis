@@ -3,6 +3,10 @@
 #include <marlin/Processor.h>
 #include <EVENT/SimTrackerHit.h>
 #include <UTIL/LCTrackerConf.h>
+#include "DD4hep/Detector.h"
+#include "DD4hep/DD4hepUnits.h"
+#include "DDRec/Surface.h"
+#include "DDRec/SurfaceManager.h"
 
 #include <TH1.h>
 
@@ -44,7 +48,8 @@ public:
   virtual void end() ;
 
   void LayerInfo(const EVENT::TrackerHit* trkhit, int offset);
-  
+  float getCorrectedTime(float hitT, dd4hep::rec::Vector3D pos);
+
 private:
   //! Tracker hit collections
   std::string _vbtrkhitColName {};

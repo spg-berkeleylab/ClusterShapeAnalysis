@@ -92,7 +92,7 @@ void ClusterHists::fill(const EVENT::TrackerHit* trkhit)
     incidentTheta += M_PI;
   streamlog_out(DEBUG6) << "Theta: " << incidentTheta << std::endl;
 
-  h_cluster_timing -> Fill(trkhit->getTime());
+  h_cluster_timing -> Fill(getCorrectedTime(trkhit->getTime(),trkhit->getPosition()));
   
   //Calculating cluster size
   const lcio::LCObjectVec &rawHits = trkhit->getRawHits(); 
@@ -107,7 +107,7 @@ void ClusterHists::fill(const EVENT::TrackerHit* trkhit)
   for (size_t j=0; j<loopsize; ++j) {
     lcio::SimTrackerHit *hitConstituent = dynamic_cast<lcio::SimTrackerHit*>( rawHits[j] );
     h_hit_edep->Fill(hitConstituent->getEDep());
-    h_hit_timing -> Fill(hitConstituent->getTime());
+    h_hit_timing -> Fill(getCorrectedTime(hitConstituent->getTime(),hitConstituent->getPosition()));
     const double *localPos = hitConstituent->getPosition();
     float x_local = localPos[0];
     float y_local = localPos[1];
@@ -226,4 +226,14 @@ void ClusterHists::fill(const EVENT::TrackerHit* trkhit)
     h_cluster_pos_3->Fill(z,r);
     h_size_r_tot_3->Fill(r, cluster_size_tot);
     }   
+}
+
+float ClusterHists::getCorrectedTime(float hitT, dd4hep::rec::Vector3D pos)
+{
+  double hitR = pos.r();
+  // Correcting for the propagation time
+  double dt = hitR / (TMath::C() / 1e6); //assuming beta=1 i.e. v=c
+  hitT -= dt;
+
+  return hitT;
 }

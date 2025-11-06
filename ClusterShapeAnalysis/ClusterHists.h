@@ -2,6 +2,10 @@
 
 #include <TH2.h>
 #include <TH1.h>
+#include "DD4hep/Detector.h"
+#include "DD4hep/DD4hepUnits.h"
+#include "DDRec/Surface.h"
+#include "DDRec/SurfaceManager.h"
 
 //#include <ACTSTracking/GeometryIdMappingTool.hxx>
 
@@ -22,6 +26,7 @@ public:
 
   // Fill histograms with a single track hit
   void fill(const EVENT::TrackerHit* trkhit);
+  float getCorrectedTime(float hitT, dd4hep::rec::Vector3D pos);
 
   TH1* h_cluster_edep_BX;
 

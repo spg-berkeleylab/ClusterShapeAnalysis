@@ -303,7 +303,7 @@ void ClusterShapeHistProc::processEvent( LCEvent * evt )
   for (int i=0; i<maxTrkHits; ++i)
     {
       const EVENT::TrackerHit *trkhit=static_cast<const EVENT::TrackerHit*>(vbtrkhitCol->getElementAt(i));
-      h_trackerhit_timing -> Fill(trkhit->getTime());
+      h_trackerhit_timing -> Fill(getCorrectedTime(trkhit->getTime(),trkhit->getPosition()));
       streamlog_out(DEBUG9) << "Filling VB clusters with VB track hits..." << std::endl;
       _clusters_vb->fill(trkhit);
       LayerInfo(trkhit, 0);
@@ -319,7 +319,7 @@ void ClusterShapeHistProc::processEvent( LCEvent * evt )
 	lcio::SimTrackerHit *hitConstituent_i = dynamic_cast<lcio::SimTrackerHit*>( hits[i] );
 	for(int j=i+1; j<hits.size(); j++){
 	  lcio::SimTrackerHit *hitConstituent_j = dynamic_cast<lcio::SimTrackerHit*>( hits[j] );
-	  h_inPixPUTimeDiff[layer]->Fill(hitConstituent_i->getTime()-hitConstituent_j->getTime());
+	  h_inPixPUTimeDiff[layer]->Fill(getCorrectedTime(hitConstituent_i->getTime(),hitConstituent_i->getPosition())-getCorrectedTime(hitConstituent_j->getTime(),hitConstituent_j->getPosition()));
 	}
       }
     }
@@ -333,7 +333,7 @@ void ClusterShapeHistProc::processEvent( LCEvent * evt )
   for (int i=0; i<maxTrkHits; ++i)
     {
       const EVENT::TrackerHit *trkhit=static_cast<const EVENT::TrackerHit*>(vetrkhitCol->getElementAt(i));
-      h_trackerhit_timing -> Fill(trkhit->getTime());
+      h_trackerhit_timing -> Fill(getCorrectedTime(trkhit->getTime(),trkhit->getPosition()));
       streamlog_out(DEBUG9) << "Filling VE clusters with VE track hits..." << std::endl;
       _clusters_ve->fill(trkhit);
       LayerInfo(trkhit, 0);
@@ -345,7 +345,7 @@ void ClusterShapeHistProc::processEvent( LCEvent * evt )
   for (int i=0; i<maxTrkHits; ++i)
     {
       const EVENT::TrackerHit *trkhit=static_cast<const EVENT::TrackerHit*>(ibtrkhitCol->getElementAt(i));
-      h_trackerhit_timing -> Fill(trkhit->getTime());
+      h_trackerhit_timing -> Fill(getCorrectedTime(trkhit->getTime(),trkhit->getPosition()));
       streamlog_out(DEBUG9) << "Filling IB clusters with IB track hits..." << std::endl;
       _clusters_ib->fill(trkhit);
       LayerInfo(trkhit, 10);
@@ -357,7 +357,7 @@ void ClusterShapeHistProc::processEvent( LCEvent * evt )
   for (int i=0; i<maxTrkHits; ++i)
     {
       const EVENT::TrackerHit *trkhit=static_cast<const EVENT::TrackerHit*>(ietrkhitCol->getElementAt(i));
-      h_trackerhit_timing -> Fill(trkhit->getTime());
+      h_trackerhit_timing -> Fill(getCorrectedTime(trkhit->getTime(),trkhit->getPosition()));
       streamlog_out(DEBUG9) << "Filling IE clusters with IE track hits..." << std::endl;
       _clusters_ie->fill(trkhit);
       LayerInfo(trkhit, 10);
@@ -369,7 +369,7 @@ void ClusterShapeHistProc::processEvent( LCEvent * evt )
   for (int i=0; i<maxTrkHits; ++i)
     {
       const EVENT::TrackerHit *trkhit=static_cast<const EVENT::TrackerHit*>(obtrkhitCol->getElementAt(i));
-      h_trackerhit_timing -> Fill(trkhit->getTime());
+      h_trackerhit_timing -> Fill(getCorrectedTime(trkhit->getTime(),trkhit->getPosition()));
       streamlog_out(DEBUG9) << "Filling OB clusters with OB track hits..." << std::endl;
       _clusters_ob->fill(trkhit);
       LayerInfo(trkhit, 20);
@@ -381,7 +381,7 @@ void ClusterShapeHistProc::processEvent( LCEvent * evt )
   for (int i=0; i<maxTrkHits; ++i)
     {
       const EVENT::TrackerHit *trkhit=static_cast<const EVENT::TrackerHit*>(oetrkhitCol->getElementAt(i));
-      h_trackerhit_timing -> Fill(trkhit->getTime());
+      h_trackerhit_timing -> Fill(getCorrectedTime(trkhit->getTime(),trkhit->getPosition()));
       streamlog_out(DEBUG9) << "Filling OE clusters with OE track hits..." << std::endl;
       _clusters_oe->fill(trkhit);
       LayerInfo(trkhit, 20);
@@ -511,6 +511,16 @@ void ClusterShapeHistProc::processEvent( LCEvent * evt )
       }
       _resolution_oe->fill(trkhit,simtrkhit,trkhitplane);
     }
+}
+
+float ClusterShapeHistProc::getCorrectedTime(float hitT, dd4hep::rec::Vector3D pos)
+{
+  double hitR = pos.r();
+  // Correcting for the propagation time
+  double dt = hitR / (TMath::C() / 1e6); //assuming beta=1 i.e. v=c
+  hitT -= dt;
+
+  return hitT;
 }
 
 void ClusterShapeHistProc::LayerInfo(const EVENT::TrackerHit* trkhit, int offset)
