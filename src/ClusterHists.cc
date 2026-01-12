@@ -13,33 +13,13 @@ ClusterHists::ClusterHists()
   h_size_theta_y    = new TH2F("cluster_size_vs_theta_y" , ";Cluster #theta; Cluster size" , 100, 0,  3.14,  31,  -0.5,  30.5  );
   h_size_theta_x    = new TH2F("cluster_size_vs_theta_x" , ";Cluster #theta; Cluster size" , 100, 0,  3.14,  31,  -0.5,  30.5  );
   h_size_theta_tot  = new TH2F("cluster_size_vs_theta_tot" , ";Cluster #theta; Cluster size" , 100, 0,  3.14,  31,  -0.5,  30.5  );
-  h_size_theta_tot_0  = new TH2F("cluster_size_vs_theta_tot_0" , ";Cluster #theta; Cluster size" , 100, 0,  3.14,  31,  -0.5,  30.5  );
-  h_size_theta_tot_1  = new TH2F("cluster_size_vs_theta_tot_1" , ";Cluster #theta; Cluster size" , 100, 0,  3.14,  31,  -0.5,  30.5  );
-  h_size_theta_tot_2  = new TH2F("cluster_size_vs_theta_tot_2" , ";Cluster #theta; Cluster size" , 100, 0,  3.14,  31,  -0.5,  30.5  );
-  h_size_theta_tot_3  = new TH2F("cluster_size_vs_theta_tot_3" , ";Cluster #theta; Cluster size" , 100, 0,  3.14,  31,  -0.5,  30.5  );
-  h_size_theta_tot_4  = new TH2F("cluster_size_vs_theta_tot_4" , ";Cluster #theta; Cluster size" , 100, 0,  3.14,  31,  -0.5,  30.5  );
-  h_size_theta_tot_5  = new TH2F("cluster_size_vs_theta_tot_5" , ";Cluster #theta; Cluster size" , 100, 0,  3.14,  31,  -0.5,  30.5  );
-  h_size_theta_tot_6  = new TH2F("cluster_size_vs_theta_tot_6" , ";Cluster #theta; Cluster size" , 100, 0,  3.14,  31,  -0.5,  30.5  );
-  h_size_theta_tot_7  = new TH2F("cluster_size_vs_theta_tot_7" , ";Cluster #theta; Cluster size" , 100, 0,  3.14,  31,  -0.5,  30.5  );
-  h_size_theta_tot_8  = new TH2F("cluster_size_vs_theta_tot_8" , ";Cluster #theta; Cluster size" , 100, 0,  3.14,  31,  -0.5,  30.5  );
-  h_size_theta_x_0  = new TH2F("cluster_size_vs_theta_x_0" , ";Cluster #theta; Cluster size" , 100, 0,  3.14,  31,  -0.5,  30.5  );
-  h_size_theta_x_1  = new TH2F("cluster_size_vs_theta_x_1" , ";Cluster #theta; Cluster size" , 100, 0,  3.14,  31,  -0.5,  30.5  );
-  h_size_theta_x_2  = new TH2F("cluster_size_vs_theta_x_2" , ";Cluster #theta; Cluster size" , 100, 0,  3.14,  31,  -0.5,  30.5  );
-  h_size_theta_x_3  = new TH2F("cluster_size_vs_theta_x_3" , ";Cluster #theta; Cluster size" , 100, 0,  3.14,  31,  -0.5,  30.5  );
-  h_size_theta_x_4  = new TH2F("cluster_size_vs_theta_x_4" , ";Cluster #theta; Cluster size" , 100, 0,  3.14,  31,  -0.5,  30.5  );
-  h_size_theta_x_5  = new TH2F("cluster_size_vs_theta_x_5" , ";Cluster #theta; Cluster size" , 100, 0,  3.14,  31,  -0.5,  30.5  );
-  h_size_theta_x_6  = new TH2F("cluster_size_vs_theta_x_6" , ";Cluster #theta; Cluster size" , 100, 0,  3.14,  31,  -0.5,  30.5  );
-  h_size_theta_x_7  = new TH2F("cluster_size_vs_theta_x_7" , ";Cluster #theta; Cluster size" , 100, 0,  3.14,  31,  -0.5,  30.5  );
-  h_size_theta_x_8  = new TH2F("cluster_size_vs_theta_x_8" , ";Cluster #theta; Cluster size" , 100, 0,  3.14,  31,  -0.5,  30.5  );
-  h_size_theta_y_0  = new TH2F("cluster_size_vs_theta_y_0" , ";Cluster #theta; Cluster size" , 100, 0,  3.14,  31,  -0.5,  30.5  );
-  h_size_theta_y_1  = new TH2F("cluster_size_vs_theta_y_1" , ";Cluster #theta; Cluster size" , 100, 0,  3.14,  31,  -0.5,  30.5  );
-  h_size_theta_y_2  = new TH2F("cluster_size_vs_theta_y_2" , ";Cluster #theta; Cluster size" , 100, 0,  3.14,  31,  -0.5,  30.5  );
-  h_size_theta_y_3  = new TH2F("cluster_size_vs_theta_y_3" , ";Cluster #theta; Cluster size" , 100, 0,  3.14,  31,  -0.5,  30.5  );
-  h_size_theta_y_4  = new TH2F("cluster_size_vs_theta_y_4" , ";Cluster #theta; Cluster size" , 100, 0,  3.14,  31,  -0.5,  30.5  );
-  h_size_theta_y_5  = new TH2F("cluster_size_vs_theta_y_5" , ";Cluster #theta; Cluster size" , 100, 0,  3.14,  31,  -0.5,  30.5  );
-  h_size_theta_y_6  = new TH2F("cluster_size_vs_theta_y_6" , ";Cluster #theta; Cluster size" , 100, 0,  3.14,  31,  -0.5,  30.5  );
-  h_size_theta_y_7  = new TH2F("cluster_size_vs_theta_y_7" , ";Cluster #theta; Cluster size" , 100, 0,  3.14,  31,  -0.5,  30.5  );
-  h_size_theta_y_8  = new TH2F("cluster_size_vs_theta_y_8" , ";Cluster #theta; Cluster size" , 100, 0,  3.14,  31,  -0.5,  30.5  );
+  for(int i=0; i<=8; i++){
+    h_size_theta_tot_layer[i]  = new TH2F(Form("cluster_size_vs_theta_tot_layer%d", i), ";Cluster #theta; Cluster size" , 100, 0,  3.14,  31,  -0.5,  30.5  );
+    h_size_theta_x_layer[i]  = new TH2F(Form("cluster_size_vs_theta_x_layer%d", i), ";Cluster #theta; Cluster size" , 100, 0,  3.14,  31,  -0.5,  30.5  );
+    h_size_theta_y_layer[i]  = new TH2F(Form("cluster_size_vs_theta_y_layer%d", i), ";Cluster #theta; Cluster size" , 100, 0,  3.14,  31,  -0.5,  30.5  );
+    h_cluster_layer[i] = new TH1F(Form("nClusters_layer%d", i), ";Number of Hits / Cluster; Entries",50,0,50);
+    h_hits_layer[i] = new TH1F(Form("nHits_layer%d", i), ";Total number of hits; Entries",50,0,50);
+  }
   h_size_r_tot      = new TH2F("cluster_size_vs_R_tot" , ";Cluster R (x^2+y^2)^(1/2) (mm); Cluster size" , 100, 20,  120,  31,  -0.5,  30.5  );
   h_size_r_tot_0     = new TH2F("cluster_size_vs_R_tot_0" , ";Cluster R (x^2+y^2)^(1/2) (mm); Cluster size" , 100, 20,  120,  31,  -0.5,  30.5  );
   h_size_r_tot_1     = new TH2F("cluster_size_vs_R_tot_1" , ";Cluster R (x^2+y^2)^(1/2) (mm); Cluster size" , 100, 20,  120,  31,  -0.5,  30.5  );
@@ -78,26 +58,10 @@ ClusterHists::ClusterHists()
   h_x_y = new TH2F("x_y" , ";x_y ; r"        , numbins_r, -rmax_all, rmax_all, numbins_r, -rmax_all, rmax_all);
   h_z_r_hits = new TH2F("z_r_hits" , ";z_r ; r"        , numbins_z,  zmin_all, zmax_all, numbins_z, rmin_all, rmax_all);
   h_x_y_hits = new TH2F("x_y_hits" , ";x_y ; r"        , numbins_r, -rmax_all, rmax_all, numbins_r, -rmax_all, rmax_all);
-  h_z_layer0   = new TH1F("hits_vs_z_layer0  " , ";z   ; Num Hits" , numbins_z,  zmin_all, zmax_all);
-  h_z_layer1   = new TH1F("hits_vs_z_layer1  " , ";z   ; Num Hits" , numbins_z,  zmin_all, zmax_all);
-  h_z_layer2   = new TH1F("hits_vs_z_layer2  " , ";z   ; Num Hits" , numbins_z,  zmin_all, zmax_all);
-  h_z_layer3   = new TH1F("hits_vs_z_layer3  " , ";z   ; Num Hits" , numbins_z,  zmin_all, zmax_all);
-  h_z_layer4   = new TH1F("hits_vs_z_layer4  " , ";z   ; Num Hits" , numbins_z,  zmin_all, zmax_all);
-  h_z_layer5   = new TH1F("hits_vs_z_layer5  " , ";z   ; Num Hits" , numbins_z,  zmin_all, zmax_all);
-  h_z_layer6   = new TH1F("hits_vs_z_layer6  " , ";z   ; Num Hits" , numbins_z,  zmin_all, zmax_all);
-  h_z_layer7   = new TH1F("hits_vs_z_layer7  " , ";z   ; Num Hits" , numbins_z,  zmin_all, zmax_all);
-  h_z_layer8   = new TH1F("hits_vs_z_layer8  " , ";z   ; Num Hits" , numbins_z,  zmin_all, zmax_all);
-  h_r_layer0   = new TH1F("hits_vs_r_layer0  " , ";r   ; Num Hits" , numbins_r,  rmin_all, rmax_all);
-  h_r_layer1   = new TH1F("hits_vs_r_layer1  " , ";r   ; Num Hits" , numbins_r,  rmin_all, rmax_all);
-  h_r_layer2   = new TH1F("hits_vs_r_layer2  " , ";r   ; Num Hits" , numbins_r,  rmin_all, rmax_all);
-  h_r_layer3   = new TH1F("hits_vs_r_layer3  " , ";r   ; Num Hits" , numbins_r,  rmin_all, rmax_all);
-  h_r_layer4   = new TH1F("hits_vs_r_layer4  " , ";r   ; Num Hits" , numbins_r,  rmin_all, rmax_all);
-  h_r_layer5   = new TH1F("hits_vs_r_layer5  " , ";r   ; Num Hits" , numbins_r,  rmin_all, rmax_all);
-  h_r_layer6   = new TH1F("hits_vs_r_layer6  " , ";r   ; Num Hits" , numbins_r,  rmin_all, rmax_all);
-  h_r_layer7   = new TH1F("hits_vs_r_layer7  " , ";r   ; Num Hits" , numbins_r,  rmin_all, rmax_all);
-  h_r_layer8   = new TH1F("hits_vs_r_layer8  " , ";r   ; Num Hits" , numbins_r,  rmin_all, rmax_all);
-
-
+  for(int i=0; i<=8; i++){
+    h_z_layer[i]   = new TH1F(Form("hits_vs_z_layer%d", i), ";z   ; Num Hits" , numbins_z,  zmin_all, zmax_all);
+    h_r_layer[i]   = new TH1F(Form("hits_vs_r_layer%d", i), ";r   ; Num Hits" , numbins_r,  rmin_all, rmax_all);
+  }
   // histograms with ranges that will just show vertex tracker hits
   int numbins_vx = 500;
   int rmin_vx = 0;
@@ -128,7 +92,7 @@ void ClusterHists::fill(const EVENT::TrackerHit* trkhit)
     incidentTheta += M_PI;
   streamlog_out(DEBUG6) << "Theta: " << incidentTheta << std::endl;
 
-  h_cluster_timing -> Fill(trkhit->getTime());
+  h_cluster_timing -> Fill(getCorrectedTime(trkhit->getTime(),trkhit->getPosition()));
   
   //Calculating cluster size
   const lcio::LCObjectVec &rawHits = trkhit->getRawHits(); 
@@ -143,11 +107,11 @@ void ClusterHists::fill(const EVENT::TrackerHit* trkhit)
   for (size_t j=0; j<loopsize; ++j) {
     lcio::SimTrackerHit *hitConstituent = dynamic_cast<lcio::SimTrackerHit*>( rawHits[j] );
     h_hit_edep->Fill(hitConstituent->getEDep());
-    h_hit_timing -> Fill(hitConstituent->getTime());
+    h_hit_timing -> Fill(getCorrectedTime(hitConstituent->getTime(),hitConstituent->getPosition()));
     const double *localPos = hitConstituent->getPosition();
     float x_local = localPos[0];
     float y_local = localPos[1];
-    streamlog_out(DEBUG6) << "Local y: " << y_local << ", local x: " << x_local << std::endl;
+    streamlog_out(DEBUG6) << "Hit: "<<j<< " Local y: " << y_local << ", local x: " << x_local << std::endl;
 
     if (y_local < ymin){
       ymin = y_local;
@@ -208,75 +172,19 @@ void ClusterHists::fill(const EVENT::TrackerHit* trkhit)
   h_r->Fill(r);
   h_z_r->Fill(z,r);
   h_x_y->Fill(x,y);
+  h_cluster_layer[layerID]->Fill(loopsize);
+  
   for (size_t j=0; j<loopsize; ++j) {
     h_hits_by_layer->Fill(layerID);
     h_z_r_hits->Fill(z,r);
     h_x_y_hits->Fill(x,y);
-    if(layerID==0){
-      h_z_layer0->Fill(z);
-      h_r_layer0->Fill(r);
-      h_size_theta_tot_0->Fill(incidentTheta, cluster_size_tot);
-      h_size_theta_x_0->Fill(incidentTheta, cluster_size_x);
-      h_size_theta_y_0->Fill(incidentTheta, cluster_size_y);
-    }
-    if(layerID==1){
-      h_z_layer1->Fill(z);
-      h_r_layer1->Fill(r);
-      h_size_theta_tot_1->Fill(incidentTheta, cluster_size_tot);
-      h_size_theta_x_1->Fill(incidentTheta, cluster_size_x);
-      h_size_theta_y_1->Fill(incidentTheta, cluster_size_y);
-    }
-    if(layerID==2){
-      h_z_layer2->Fill(z);
-      h_r_layer2->Fill(r);
-      h_size_theta_tot_2->Fill(incidentTheta, cluster_size_tot);
-      h_size_theta_x_2->Fill(incidentTheta, cluster_size_x);
-      h_size_theta_y_2->Fill(incidentTheta, cluster_size_y);
-    }
-    if(layerID==3){
-      h_z_layer3->Fill(z);
-      h_r_layer3->Fill(r);
-      h_size_theta_tot_3->Fill(incidentTheta, cluster_size_tot);
-      h_size_theta_x_3->Fill(incidentTheta, cluster_size_x);
-      h_size_theta_y_3->Fill(incidentTheta, cluster_size_y);
-    }
-    if(layerID==4){
-      h_z_layer4->Fill(z);
-      h_r_layer4->Fill(r);
-      h_size_theta_tot_4->Fill(incidentTheta, cluster_size_tot);
-      h_size_theta_x_4->Fill(incidentTheta, cluster_size_x);
-      h_size_theta_y_4->Fill(incidentTheta, cluster_size_y);
-    }
-    if(layerID==5){
-      h_z_layer5->Fill(z);
-      h_r_layer5->Fill(r);
-      h_size_theta_tot_5->Fill(incidentTheta, cluster_size_tot);
-      h_size_theta_x_5->Fill(incidentTheta, cluster_size_x);
-      h_size_theta_y_5->Fill(incidentTheta, cluster_size_y);
-    }
-    if(layerID==6){
-      h_z_layer6->Fill(z);
-      h_r_layer6->Fill(r);
-      h_size_theta_tot_6->Fill(incidentTheta, cluster_size_tot);
-      h_size_theta_x_6->Fill(incidentTheta, cluster_size_x);
-      h_size_theta_y_6->Fill(incidentTheta, cluster_size_y);
-    }
-    if(layerID==7){
-      h_z_layer7->Fill(z);
-      h_r_layer7->Fill(r);
-      h_size_theta_tot_7->Fill(incidentTheta, cluster_size_tot);
-      h_size_theta_x_7->Fill(incidentTheta, cluster_size_x);
-      h_size_theta_y_7->Fill(incidentTheta, cluster_size_y);
-    }
-    if(layerID==8){
-      h_z_layer8->Fill(z);
-      h_r_layer8->Fill(r);
-      h_size_theta_tot_8->Fill(incidentTheta, cluster_size_tot);
-      h_size_theta_x_8->Fill(incidentTheta, cluster_size_x);
-      h_size_theta_y_8->Fill(incidentTheta, cluster_size_y);
-    }
-  }
-  
+    h_z_layer[layerID]->Fill(z);
+    h_r_layer[layerID]->Fill(r);
+    h_hits_layer[layerID]->Fill(loopsize);
+    h_size_theta_tot_layer[layerID]->Fill(incidentTheta, cluster_size_tot);
+    h_size_theta_x_layer[layerID]->Fill(incidentTheta, cluster_size_x);
+    h_size_theta_y_layer[layerID]->Fill(incidentTheta, cluster_size_y);
+  }  
 
   // vertex hists
   h_x_vx->Fill(x);  
@@ -318,4 +226,14 @@ void ClusterHists::fill(const EVENT::TrackerHit* trkhit)
     h_cluster_pos_3->Fill(z,r);
     h_size_r_tot_3->Fill(r, cluster_size_tot);
     }   
+}
+
+float ClusterHists::getCorrectedTime(float hitT, dd4hep::rec::Vector3D pos)
+{
+  double hitR = pos.r();
+  // Correcting for the propagation time
+  double dt = hitR / (TMath::C() / 1e6); //assuming beta=1 i.e. v=c
+  hitT -= dt;
+
+  return hitT;
 }

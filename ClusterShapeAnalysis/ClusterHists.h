@@ -2,6 +2,10 @@
 
 #include <TH2.h>
 #include <TH1.h>
+#include "DD4hep/Detector.h"
+#include "DD4hep/DD4hepUnits.h"
+#include "DDRec/Surface.h"
+#include "DDRec/SurfaceManager.h"
 
 //#include <ACTSTracking/GeometryIdMappingTool.hxx>
 
@@ -22,6 +26,7 @@ public:
 
   // Fill histograms with a single track hit
   void fill(const EVENT::TrackerHit* trkhit);
+  float getCorrectedTime(float hitT, dd4hep::rec::Vector3D pos);
 
   TH1* h_cluster_edep_BX;
 
@@ -29,33 +34,9 @@ private:
   TH2* h_size_theta_y;
   TH2* h_size_theta_x;
   TH2* h_size_theta_tot;
-  TH2* h_size_theta_tot_0;
-  TH2* h_size_theta_tot_1;
-  TH2* h_size_theta_tot_2;
-  TH2* h_size_theta_tot_3;
-  TH2* h_size_theta_tot_4;
-  TH2* h_size_theta_tot_5;
-  TH2* h_size_theta_tot_6;
-  TH2* h_size_theta_tot_7;
-  TH2* h_size_theta_tot_8;
-  TH2* h_size_theta_x_0;
-  TH2* h_size_theta_x_1;
-  TH2* h_size_theta_x_2;
-  TH2* h_size_theta_x_3;
-  TH2* h_size_theta_x_4;
-  TH2* h_size_theta_x_5;
-  TH2* h_size_theta_x_6;
-  TH2* h_size_theta_x_7;
-  TH2* h_size_theta_x_8;
-  TH2* h_size_theta_y_0;
-  TH2* h_size_theta_y_1;
-  TH2* h_size_theta_y_2;
-  TH2* h_size_theta_y_3;
-  TH2* h_size_theta_y_4;
-  TH2* h_size_theta_y_5;
-  TH2* h_size_theta_y_6;
-  TH2* h_size_theta_y_7;
-  TH2* h_size_theta_y_8;
+  TH2* h_size_theta_tot_layer[9];
+  TH2* h_size_theta_x_layer[9];
+  TH2* h_size_theta_y_layer[9];
   TH2* h_size_r_tot;
   TH2* h_size_r_tot_0;
   TH2* h_size_r_tot_1;
@@ -84,29 +65,15 @@ private:
   TH2* h_x_y;
   TH2* h_z_r_hits;
   TH2* h_x_y_hits;
-  TH1* h_z_layer0;
-  TH1* h_z_layer1;
-  TH1* h_z_layer2;
-  TH1* h_z_layer3;
-  TH1* h_z_layer4;
-  TH1* h_z_layer5;
-  TH1* h_z_layer6;
-  TH1* h_z_layer7;
-  TH1* h_z_layer8;
-  TH1* h_r_layer0;
-  TH1* h_r_layer1;
-  TH1* h_r_layer2;
-  TH1* h_r_layer3;
-  TH1* h_r_layer4;
-  TH1* h_r_layer5;
-  TH1* h_r_layer6;
-  TH1* h_r_layer7;
-  TH1* h_r_layer8;
+  TH1* h_z_layer[9];
+  TH1* h_r_layer[9];
   TH1* h_avgHits;
   TH1* h_sysID;
   TH1* h_cluster_timing;
   TH1* h_hit_timing;
-  
+  TH1* h_hits_layer[9];
+  TH1* h_cluster_layer[9];
+
   // vertex
   TH1* h_x_vx;  
   TH1* h_y_vx;  
